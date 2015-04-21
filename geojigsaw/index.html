@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>Geojigsaw</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+    <meta name='author' content='Esri' />
+    <meta name='keywords' content='esri geogame puzzle map gis geojigsaw voronoi' />
+    <meta name='description' content='GeoJigsaw is a JS-based web app that allows users to create, rate and play geo-jigsaws puzzles.' />
+    <link type='image/ico' rel='shortcut icon' href='img/favicon.ico' />
+    <link type='image/ico' rel='icon' href='img/favicon.ico' />
+    <link type='image/ico' rel='apple-touch-icon' href='img/apple-touch-icon.png' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/3.13/esri/css/esri.css'>
+    <link type='text/css' rel='stylesheet' href='css/bootstrap.min.css' />
+    <link type='text/css' rel='stylesheet' href='css/bootstrap-slider.min.css' />
+    <link type='text/css' rel='stylesheet' href='index.css'>
+    <script type='text/javascript' src='js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='js/jquery.ba-throttle-debounce.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap-slider.min.js'></script>
+    <script type='text/javascript' src='js/d3.min.js'></script>
+    <script type='text/javascript' src='js/sylvester.min.js'></script>
+    <script type='text/javascript' src='//js.arcgis.com/3.13compact/'></script>
+    <script type='text/javascript' src='index.js'></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-18', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id='right'>
+        <div id='map'></div>
+        <div id='puzzle'>
+            <svg>
+                <defs>
+                    <filter id='innershadow'>
+                        <feOffset dx='3' dy='3' />
+                        <feGaussianBlur stdDeviation='10' result='offset-blur' />
+                        <feComposite operator='out' in='SourceGraphic' in2='offset-blur' result='inverse' />
+                        <feFlood flood-color='black' flood-opacity='1' result='color' />
+                        <feComposite operator='in' in='color' in2='inverse' result='shadow' />
+                        <feComponentTransfer in='shadow' result='shadow'>
+                            <feFuncA type='linear' slope='.75' />
+                        </feComponentTransfer>
+                        <feComposite operator='over' in='shadow' in2='SourceGraphic' />
+                    </filter>
+                    <filter id='innerbevel'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur' />
+                        <feOffset in='blur' dy='2' dx='2' />
+                        <feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='hlDiff' />
+                        <feFlood flood-color='white' flood-opacity='.5' />
+                        <feComposite in2='hlDiff' operator='in' />
+                        <feComposite in2='SourceGraphic' operator='over' result='withGlow' />
+                        <feOffset in='blur' dy='-2' dx='-2' />
+                        <feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='shadowDiff' />
+                        <feFlood flood-color='black' flood-opacity='1' />
+                        <feComposite in2='shadowDiff' operator='in' />
+                        <feComposite in2='withGlow' operator='over' />
+                    </filter>
+                    <filter id='innerbevel_dropshadow'>
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur' />
+                        <feOffset dy='1' dx='1' />
+                        <feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='hlDiff' />
+                        <feFlood flood-color='white' flood-opacity='.5' />
+                        <feComposite in2='hlDiff' operator='in' />
+                        <feComposite in2='SourceGraphic' operator='over' result='withGlow' />
+                        <feOffset in='blur' dy='-1' dx='-1' />
+                        <feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='shadowDiff' />
+                        <feFlood flood-color='black' flood-opacity='1' />
+                        <feComposite in2='shadowDiff' operator='in' />
+                        <feComposite in2='withGlow' operator='over' />
+                        <feGaussianBlur in='SourceAlpha' stdDeviation='3' />
+                        <feOffset dx='5' dy='5' result='offsetblur' />
+                        <feComponentTransfer>
+                            <feFuncA type='linear' slope='0.5' />
+                        </feComponentTransfer>
+                        <feMerge>
+                            <feMergeNode />
+                            <feMergeNode in='withGlow' />
+                        </feMerge>
+                    </filter>
+                    <filter id='dropshadow'>
+                         <feOffset result='offOut' in='SourceAlpha' dx='3' dy='3' />
+                        <feGaussianBlur result='blurOut' in='offOut' stdDeviation='5' />
+                        <feBlend in='SourceGraphic' in2='blurOut' mode='normal' />
+                    </filter>
+                </defs>
+                <g>
+                </g>
+            </svg>
+        </div>
+    </div>
+    <div id='left'>
+        <div id='left-margins'>          
+            <div id='application-title'>Geojigsaw</div>
+            <div class='heading'>Randomness</div>
+            <input id='slider-randomness' />
+            <div class='heading'>Tooth Threshold</div>
+            <input id='slider-tooth-threshold' />
+            <div class='heading'>Tooth Size</div>
+            <input id='slider-tooth-size' />
+            <div class='heading'>Puzzle Size</div>
+            <input id='slider-puzzle-size' />
+            <div class='heading'>Snap Tolerance</div>
+            <input id='slider-snap-tolerance' />
+            <div class='heading'>Display</div>
+            <form role='form'>
+                <div class='checkbox'>
+                    <label><input id='checkbox-rotate' type='checkbox' checked> Rotate Pieces</label>
+                </div>
+                <div class='checkbox'>
+                    <label>
+                        <input id='checkbox-show-shading' type='checkbox'> Enable shading<br />(not recommended in Chome)
+                    </label>
+                </div>
+                <div class='checkbox'>
+                    <label><input id='checkbox-show-outline' type='checkbox' checked> Show outline</label>
+                </div>
+            </form>
+            <button id='button-create' type='button' class='btn btn-primary'>Create</button>
+            <button id='button-start' type='button' class='btn btn-primary'>Start</button>
+            <button id='button-quit' type='button' class='btn btn-primary'>Quit</button>
+        </div>
+        <a id='application-logo' href='http://www.esri.com' target='_blank'>
+            <img src='img/esri-transparent.png' alt='esri' height='100'>
+        </a>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,89 @@
+﻿html, body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-rendering: optimizeLegibility;
+    color: #fff;
+}
+
+#left {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 275px;
+    bottom: 0px;
+    background-color: #ff006e;
+    -webkit-box-shadow: 3px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow:    3px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    box-shadow:         3px 0px 5px 0px rgba(50, 50, 50, 0.3);
+}
+
+#left-margins {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 5px;
+    bottom: 10px;
+}
+
+#right {
+    position: absolute;
+    top: 0px;
+    left: 275px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#application-title {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+#map {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#puzzle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    pointer-events: none;
+}
+
+#left-margins > button {
+    border-radius: 0px 0px 0px 0px;
+    width: 80px;
+    margin: 0px 0px 0px 0px; 
+}
+
+.heading {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+
+.slider.slider-horizontal {
+    margin-left: 10px;
+}
+
+.slider-tick {
+    opacity: 1;
+}
+
+#application-logo {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
