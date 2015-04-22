@@ -1,7 +1,7 @@
 ﻿/* -----------------------------------------------------------------------------------
-   Map Jigsaw Puzzle
+   Geojigsaw - The Developer Edition
    Develolped by the Applications Prototype Lab
-   (c) 2014 Esri | http://www.esri.com/legal/software-license  
+   (c) 2015 Esri | http://www.esri.com/legal/software-license  
 ----------------------------------------------------------------------------------- */
 
 require([
@@ -73,9 +73,6 @@ function (
         });
         _map.on('pan', function (e) {
             zoomPuzzle(e.extent);
-        });
-        _map.on('load', function () {
-            resizeSvgWindow();
         });
 
         $('#button-start').attr('disabled', 'disabled');
@@ -169,15 +166,16 @@ function (
                     });
             });
         });
-        $(window).resize($.throttle(25, function (e) {
+        $(window).resize($.throttle(50, false, function (e) {
             resizeSvgWindow();
         }));
+        resizeSvgWindow();
 
         function resizeSvgWindow() {
             d3.select('#puzzle')
                 .select('svg')
-                .attr('width', _map.width)
-                .attr('height', _map.height);
+                .attr('width', $('#map').width())
+                .attr('height', $('#map').height());
         }
 
         // Create puzzle

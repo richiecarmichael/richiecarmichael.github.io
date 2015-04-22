@@ -20,6 +20,15 @@
     box-shadow:         3px 0px 5px 0px rgba(50, 50, 50, 0.3);
 }
 
+#left-scroll {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 100px;
+    overflow-y: auto;
+}
+
 #left-margins {
     position: absolute;
     left: 10px;
