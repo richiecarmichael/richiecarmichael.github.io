@@ -1,0 +1,120 @@
+﻿html, body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Berkshire Swash', cursive;
+    color: white;
+}
+
+#top {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 60px;
+    background-color: #2D6CA2;
+    border-bottom: 1px solid black;
+}
+
+#heading {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 42px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+#bottom {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: #000;
+}
+
+#bottom-right {
+    position: absolute;
+    top: 0px;
+    left: 250px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#map {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+#map-logo {
+    position: absolute;
+    bottom: 0px;
+    right: 3px;
+}
+
+#bottom-left {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: 250px;
+    font-size: 12px;
+    background-color: #6d8ea9;
+    padding: 0px 15px 15px 15px; /* top | right | bottom | left */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#bottom-right-banner {
+    position: absolute;
+    left: 0px;
+    right:0px;
+    bottom: 0px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.48);
+    margin-bottom: -50px;
+}
+
+#bottom-right-banner-text {
+    position: absolute;
+    left: 0px;
+    right:0px;
+    bottom: 0px;
+    top: 0px;
+    padding: 5px 0px 0px 0px;
+    text-align: center;
+    font-size: 24px;
+    color: #2e2e2e;
+}
+
+.slider.slider-horizontal {
+    margin-left: 10px;
+    width: 185px;
+}
+
+.slider-tick {
+    opacity: 1;
+}
+
+.btn-default,
+.btn-default.active,
+.btn-default:focus,
+.btn-default:hover {
+    color: #337ab7;
+}
+.btn-default.active {
+     font-weight: 700;
+}
+
+.rc-heading {
+    font-size: 18px;
+    pointer-events: none;
+    margin-top: 10px;
+}
