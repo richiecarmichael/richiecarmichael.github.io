@@ -1,0 +1,162 @@
+﻿html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Berkshire Swash', cursive;
+    color: #ffffff;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#top {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 60px;
+    background-color: #2D6CA2;
+    border-bottom: 1px solid #000;
+}
+
+#logo {
+    position: absolute;
+    top:5px;
+    left: 5px;
+}
+
+#bottom {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#bottom-left {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 270px;
+    bottom: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color:white;
+}
+
+#bottom-right {
+    position: absolute;
+    top: 0px;
+    left: 270px;
+    right: 0px;
+    bottom: 0px;
+    background-color: #000;
+}
+
+#heading {
+    position: absolute;
+    left: 0px;
+    top: 5px;
+    right: 0px;
+    text-align: center;
+    font-size: 42px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+#map {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#panel {
+    position: absolute;
+    left: 50%;
+    bottom: 5px;
+    right: 0px;
+    margin-left: -310px;
+}
+
+.rc-button {
+    display: inline-block;
+    width:100px;
+    height:50px;
+    background-color: #2D6CA2;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.rc-button-text {
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    pointer-events: none;
+}
+.rc-button.rc-checked {
+    background-color: #ff6a00;
+}
+.rc-button:hover {
+    background-color: #ffa96c;
+}
+.rc-button.rc-checked:hover {
+    background-color: #577e9f;
+}
+
+.rc-full-relative {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.rc-full-absolute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.rc-thumbnail {
+    display: block;
+    width: 250px;
+    height:250px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.rc-thumbnail-image {
+    width: 250px;
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 1;
+}
+
+.rc-thumbnail-caption {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: -50px;
+    display: table;
+    overflow: hidden;
+}
+
+.rc-thumbnail-caption-text {
+    text-align: center;
+    font-size: 18px;
+    display: table-cell;
+    vertical-align: middle;
+}
