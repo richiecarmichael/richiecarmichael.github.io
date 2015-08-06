@@ -11,6 +11,7 @@ require([
     'esri/geometry/Extent',
     'esri/geometry/ScreenPoint',
     'esri/urlUtils',
+    'esri/dijit/Search',
     'dojo/domReady!'
 ],
 function (
@@ -19,7 +20,8 @@ function (
     RasterFunction,
     Extent,
     ScreenPoint,
-    urlUtils
+    urlUtils,
+    Search
     ) {
     $(document).ready(function () {
         'use strict';
@@ -131,6 +133,9 @@ function (
                 }
             })
         });
+        
+        var s = new Search({map: _map}, 'search');
+	s.startup();
 
         // Inidicate usage of proxy for the following hosted map services
         $.each([PREVIEW, IMAGES[5].url], function () {
