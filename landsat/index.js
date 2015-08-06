@@ -245,11 +245,13 @@ function (
                         var lens = $('.rc-lens[data-id="' + that.id + '"]');
                         if ($(this).hasClass('rc-checked')) {
                             $(this).removeClass('rc-checked');
-                            lens.hide();
+                            //lens.hide();
+                            lens.css('visibility', 'hidden');
                         } else {
                             $(this).addClass('rc-checked');
                             if (lens.length) {
-                                lens.show();
+                                //lens.show();
+                                lens.css('visibility', 'visible');
                             } else {
                                 createLens(_map, that);
                             }
@@ -424,7 +426,12 @@ function (
             // Request a new map image for the lens
             function refresh() {
                 var l = $('.rc-lens[data-id="' + image.id + '"]');
+                //if (l.is(':hidden')) {
+                //    return;
+                //};
                 var p = l.position();
+                //var left = l.css('left');
+                //var top = l.css('top');
                 var w = l.width();
                 var h = l.height();
                 var ll = map.toMap(new ScreenPoint(p.left, p.top + h));
