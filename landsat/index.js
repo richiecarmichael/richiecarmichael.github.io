@@ -135,7 +135,7 @@ function (
         });
         
         var s = new Search({map: _map}, 'search');
-	s.startup();
+	    s.startup();
 
         // Inidicate usage of proxy for the following hosted map services
         $.each([PREVIEW, IMAGES[5].url], function () {
@@ -351,7 +351,7 @@ function (
                         'background-color': 'rgba(255, 255, 255, 0.5)'
                     })
                     .draggable({
-                        containment: 'window',
+                        containment: 'parent',
                         scroll: false,
                         start: function () {
                             hide();

@@ -5,6 +5,7 @@
     width: 100%;
     font-family: 'Berkshire Swash', cursive;
     color: #ffffff;
+    overflow:hidden;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
