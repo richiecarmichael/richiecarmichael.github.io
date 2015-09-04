@@ -10,7 +10,7 @@ require([
     'esri/layers/RasterFunction',
     'esri/geometry/Extent',
     'esri/geometry/ScreenPoint',
-    'esri/urlUtils',
+    //'esri/urlUtils',
     'esri/dijit/Search',
     'dojo/domReady!'
 ],
@@ -20,7 +20,7 @@ function (
     RasterFunction,
     Extent,
     ScreenPoint,
-    urlUtils,
+    //urlUtils,
     Search
     ) {
     $(document).ready(function () {
@@ -28,10 +28,9 @@ function (
 
         // Constants
         var SVGNS = 'http://www.w3.org/2000/svg';
-        var PROXY = 'http://maps.esri.com/rc/landsat/proxy.ashx';
         var SIZE = 250;
         var RANDOMNESS = 300;
-        var PREVIEW = 'http://landsat.arcgis.com/arcgis/rest/services/Landsat8_Views/ImageServer';
+        var PREVIEW = 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/Agriculture/ImageServer';
 
         // Six landsat image services hosted by Esri. A button will be addded to the screen for each service.
         var IMAGES = [
@@ -64,18 +63,16 @@ function (
                 name: '2010',
                 url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS2010_Enhanced/ImageServer',
                 color: 'purple'
-            },
-            {
-                id: 2015,
-                name: 'Today',
-                url: 'http://landsat.arcgis.com/arcgis/rest/services/Landsat8_PanSharpened/ImageServer',
-                color: 'cyan'
             }
         ];
 
         // Below is a list of present area's of interest. This list was inspired by:
         // http://earthobservatory.nasa.gov/Features/WorldOfChange/
         var BOOKMARKS = [
+            {
+                name: 'Columbia Glacier ',
+                box: [-16450158, 8557590, -16297284, 8710464]
+            },
             {
                 name: 'Palm Jebel Ali',
                 box: [6108081, 2864714, 6137013, 2888257]
@@ -136,14 +133,6 @@ function (
         
         var s = new Search({map: _map}, 'search');
 	    s.startup();
-
-        // Inidicate usage of proxy for the following hosted map services
-        $.each([PREVIEW, IMAGES[5].url], function () {
-            urlUtils.addProxyRule({
-                urlPrefix: this,
-                proxyUrl: PROXY
-            });
-        });
 
         var preview = new ArcGISImageServiceLayer(PREVIEW);
         preview.setRenderingRule(new RasterFunction({
@@ -431,12 +420,7 @@ function (
             // Request a new map image for the lens
             function refresh() {
                 var l = $('.rc-lens[data-id="' + image.id + '"]');
-                //if (l.is(':hidden')) {
-                //    return;
-                //};
                 var p = l.position();
-                //var left = l.css('left');
-                //var top = l.css('top');
                 var w = l.width();
                 var h = l.height();
                 var ll = map.toMap(new ScreenPoint(p.left, p.top + h));
