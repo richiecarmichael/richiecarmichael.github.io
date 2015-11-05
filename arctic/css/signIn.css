@@ -1,0 +1,57 @@
+.esriSignInDialog {
+  /*border: solid 2px silver !important;*/
+  border: none;
+  /*border-radius: 6px;*/
+  width: 450px !important;
+  background-color: #ff6a00;
+  /*color: black;*/
+  padding: 10px 10px 10px 10px;
+}
+
+.esriSignInDialog .dijitDialogTitleBar {
+  /*display: none;*/
+}
+
+.esriSignInDialog .dijitDialogTitle {
+  font-weight: bolder !important;
+}
+
+.esriSignInDialog .dijitDialogPaneContent {
+  border: none !important;
+  /*background-color: #fbfbfb !important;*/
+  border-radius: 0 0 4px 4px;
+}
+
+.esriSignInDialog .dijitDialogPaneContentArea {
+  /*background-color: #fbfbfb !important;*/
+  border: none !important;
+}
+
+.esriSignInDialog .dijitDialogPaneActionBar {
+  /*background-color: #fbfbfb !important;*/
+  border: none !important;
+  border-radius: 0 0 4px 4px;
+}
+
+.esriSignInDialog .dijitButtonNode {
+  /*background: #e98e33 !important;*/
+  border: none !important;
+}
+
+.esriSignInDialog .dijitButtonText {
+  /*color: white !important;*/
+}
+
+.esriSignInDialog .dijitTextBox {
+  padding: 3px;
+  /*border-radius: 5px;*/
+  border: solid 1px silver;
+}
+
+/*.dijitDialogUnderlay {
+  opacity: 1.0 !important;
+}*/
+
+.esriSignInDialog .dijitValidationContainer{
+    display: none;
+}

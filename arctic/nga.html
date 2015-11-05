@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<!--  _____          _   ____            _        _                      _          _                                            -->
+<!-- | ____|___ _ __(_) |  _ \ _ __ ___ | |_ ___ | |_ _   _ _ __   ___  | |    __ _| |__                                         -->
+<!-- |  _| / __| '__| | | |_) | '__/ _ \| __/ _ \| __| | | | '_ \ / _ \ | |   / _` | '_ \                                        -->
+<!-- | |___\__ \ |  | | |  __/| | | (_) | || (_) | |_| |_| | |_) |  __/ | |__| (_| | |_) |                                       -->
+<!-- |_____|___/_|  |_| |_|   |_|  \___/ \__\___/ \__|\__, | .__/ \___| |_____\__,_|_.__/                                        -->
+<!--                                                  |___/|_|                                                                   -->
+<!--   __  __    ____   ___  _ ____    _____          _   _                                              _                       -->
+<!--  / /__\ \  |___ \ / _ \/ | ___|  | ____|___ _ __(_) | | __      ____      ____      _____  ___ _ __(_)  ___ ___  _ __ ___   -->
+<!-- | |/ __| |   __) | | | | |___ \  |  _| / __| '__| | | | \ \ /\ / /\ \ /\ / /\ \ /\ / / _ \/ __| '__| | / __/ _ \| '_ ` _ \  -->
+<!-- | | (__| |  / __/| |_| | |___) | | |___\__ \ |  | | | |  \ V  V /  \ V  V /  \ V  V /  __/\__ \ |  | || (_| (_) | | | | | | -->
+<!-- | |\___| | |_____|\___/|_|____/  |_____|___/_|  |_| | |   \_/\_/    \_/\_/    \_/\_(_)___||___/_|  |_(_)___\___/|_| |_| |_| -->
+<!--  \_\  /_/                                           |_|                                                                     -->
+<!--                                                                                                                             -->
+<head>
+    <title>Arctic DEM</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta name='author' content='Esri' />
+    <meta name='keywords' content='' />
+    <meta name='description' content='' />
+    <link type='image/ico' rel='shortcut icon' href='img/favicon.ico' />
+    <link type='image/ico' rel='icon' href='img/favicon.ico' />
+    <link type='image/ico' rel='apple-touch-icon' href='img/apple-touch-icon.png' />
+    <link type='text/css' rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Condensed:400,300,700|Roboto+Slab:400,700' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/3.14compact/esri/css/esri.css' />
+    <link type='text/css' rel='stylesheet' href='css/bootstrap.min.css' />
+    <link type='text/css' rel='stylesheet' href='css/bootstrap-theme.min.css' />
+    <link type='text/css' rel='stylesheet' href='css/bootstrap-slider.min.css' />
+    <link type='text/css' rel='stylesheet' href='nga.css' />
+    <script type='text/javascript' src='js/jquery-2.1.4.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap-slider.min.js'></script>
+    <script type='text/javascript' src='//js.arcgis.com/3.14compact/'></script>
+    <script type='text/javascript' src='nga.js'></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-23', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id='right'>
+        <div id='map'></div>
+        <div id='bookmarks' class='btn-group-vertical btn-spacing' role='group'>
+            <button data-extent='-150.09, 60.99, -149.39, 61.51' type='button' class='btn btn-primary disabled'>Anchorage</button>
+            <button data-extent='-157.06, 70.99, -156.43, 71.43' type='button' class='btn btn-primary'>Barrow</button>
+            <button data-extent='-158.76, 58.80, -158.23, 59.30' type='button' class='btn btn-primary'>Dillingham</button>
+            <button data-extent='-162.65, 66.80, -162.48, 66.92' type='button' class='btn btn-primary'>Kotzebue</button>
+            <button data-extent='-170.48, 57.09, -170.06, 57.27' type='button' class='btn btn-primary'>St. Paul</button>
+            <button data-extent='-150.07, 68.49, -149.42, 69.01' type='button' class='btn btn-primary'>Toolik Lake</button>
+        </div>
+    </div>
+    <div id='left'>
+        <div id='left-scroll'>
+            <div id='left-margins'>
+                <div id='application-title'><h1 class='app-title'>Arctic Dem</h1></div>
+                <div id='titleHillshade' class='title'>Hillshade</div>
+                <div class='separator'></div>
+                <div class=' heading'>Sun Azimuth</div>
+                <input id='slider-sun-azimuth' />
+                <div class='heading'>Sun Altitude</div>
+                <input id='slider-sun-altitude' />
+                <div class='btn-group btn-spacing' role='group'>
+                    <button id='buttonShow' type='button' class='btn btn-primary disabled'>Show</button>
+                    <button id='buttonHide' type='button' class='btn btn-primary'>Hide</button>
+                </div>
+                <div class='title'>Elevation Selection</div>
+                <div class='separator'></div>
+                <div class='heading'>Elevation (m)</div>
+                <input id='slider-elevation' />
+                <div class='heading'>Slope</div>
+                <input id='slider-slope' />
+                <div class='heading'>Aspect</div>
+                <input id='slider-aspect' />
+                <div class='btn-spacing'>
+                    <button id='buttonReset' type='button' class='btn btn-primary'>Reset</button>
+                </div>
+            </div>
+        </div>
+        <div id='left-disclaimer'>
+            <a tabindex='0' class='info-btn' role='button' data-toggle='popover' data-trigger='focus' data-placement='top' title='Disclaimer'
+               data-content='<p>The high resolution Digital Elevation Models (DEM) used in this application are provided by the National Geospatial-Intelligence Agency (NGA). The models, derived from NGA-sponsored DigitalGlobe commercial imagery sources, support land management, sustainable development, safe recreation, scientific studies, and domain-specific challenges inherent to aviation, transportation and defense. The DEM is the standard against which landscape changes such as erosion will be measured. For more information on the DEM please click <a href="https://www.arcgis.com/home/item.html?id=c11426641b9547afa24e07b0b0448c9c" target="_blank">here</a>.</p><p>The National Geospatial-Intelligence Agency launched a public website Sept. 2 to provide unclassified information about the Arctic. The public website supports efforts to strengthen international cooperation, better understand and manage resources responsibly, enhance quality of life in the Arctic and maintain valuable and vulnerable ecosystems. For more information on this effort please click <a href="https://www.nga.mil/MediaRoom/PressReleases/Pages/NGA-provides-unclassified-geospatial-intelligence-for-the-Arctic.aspx" target="_blank">here</a>.</p><p>The public site is accessible through <a href="https://www.nga.mil" target="_blank">www.nga.mil</a> and located at <a href="http://nga.maps.arcgis.com" target="_blank">nga.maps.arcgis.com</a>.</p>'>
+                <span class='glyphicon glyphicon-info-sign'></span>
+            </a>
+        </div>
+        <div id='left-help'>
+            <a tabindex='0' class='info-btn' role='button' title='Instructions' data-toggle='popover' data-trigger='focus' data-placement='top'
+               data-content='<p>This application points to a Digital Elevation Model web service and illustrates the ability to dynamically derive alternate products from the elevation model. The application is communicates directly with the raw elevation data rather than using cached images as is typical on web mapping sites.</p><p><b>Under Hillshade:</b><br />Zoom to a location and experiment with changing both the Sun Azimuth (the direction the sun or illumination source where zero indicates due North) and Sun Altitude (the height of the sun in the sky where 0° represents the horizon and 90° directly overhead).</p><p><b>Under Elevation Selection:</b><br />Each one of the listed options <i>Elevation</i>, <i>Slope</i> and <i>Aspect</i> are filters which can be applied to the the Digital Elevation Model. They can be used together to create a logical <i>AND</i> statement.</p><p>Use the elevation slider to create an elevation selection (areas between 100 and 500 meters high) the results are shown in cyan. Make an additional selection using slope, try 0° to 30°. Finally use Aspect to find west facing slopes, try 220° to 300°. The result would be west facing areas with slopes less than 30 degrees between 100 and 500 meters tall.</p><p>The Reset Button clears your selections.</p><p>Zoom out to explore other sample sites.</p>'>
+                <span class='glyphicon glyphicon-question-sign'></span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
