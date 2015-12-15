@@ -1,0 +1,78 @@
+﻿<!-- ===============================================================
+         Developed by the Applications Prototype Lab
+   (c) 2015 Esri | http://www.esri.com/legal/software-license
+=============================================================== -->
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>Urban Growth</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+    <meta name='author' content='Esri' />
+    <meta name='keywords' content='' />
+    <meta name='description' content='' />
+    <link type='text/css' rel='stylesheet' href='//fonts.googleapis.com/css?family=Roboto:400,700|Berkshire+Swash:400' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/4.0beta2/esri/css/main.css'>
+    <link type='text/css' rel='stylesheet' href='index.css'>
+    <script type='text/javascript' src='js/jquery-2.1.4.min.js'></script>
+    <script type='text/javascript' src='js/d3.min.js'></script>
+    <script type='text/javascript' src='//js.arcgis.com/4.0beta2/'></script>
+    <script type='text/javascript' src='index.js'></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-26', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id='map'></div>
+    <div id='top-panel'>
+        <a id='logo-esri' href='http://www.esri.com'>
+            <img src='img/esri-black.png' alt='esri' height='45' />
+        </a>
+        <div id='heading'>Two Thousand Years of Urban Growth</div>
+        <div id='button-about' class='button'>About</div>
+    </div>
+    <div id='left-panel'>
+        <div id='year'></div>
+        <div id='year-title'>year</div>
+        <div id='city'></div>
+        <div id='country'></div>
+        <div id='wiki'>
+            <div id='wiki-text'></div>
+            <div id='wiki-fade'></div>
+        </div>
+        <div id='histogram'></div>
+    </div>
+    <div id='right-panel'>
+        <div id='container'></div>
+    </div>
+    <div id='chart'></div>
+    <div id='about' class='dialog'>
+        <div>
+            <div class='dialog-banner'>About Urban Growth</div>
+            <div class='dialog-description'>
+                <p>This application was designed and developed by <a href='http://www.esri.com'>Esri</a>'s <a href='http://blogs.esri.com/esri/apl/'>Applications Prototype Lab</a> in Redlands, California. The application is built using the following technologies:</p>
+                <ul>
+                    <li><a href='https://developers.arcgis.com/javascript/'>ArcGIS API for JavaScript</a> (<a href='https://developers.arcgis.com/javascript/beta/'>beta</a>) by Esri</li>
+                    <li><a href='http://d3js.org/'>D3.js</a> by <a href='http://bost.ocks.org/mike/'>Mike Bostock</a></li>
+                    <li><a href='https://www.google.com/fonts'>Google Fonts</a>, specifically <a href='https://www.google.com/fonts/specimen/Roboto'>Roboto</a> and <a href='https://www.google.com/fonts/specimen/Berkshire+Swash'>Berkshire Swash</a></li>
+                    <li><a href='http://jquery.com/'>jQuery</a> by the jQuery Foundation Inc.</li>
+                </ul>
+                <p>Inpsiration and data for this app was derived from <a href='https://en.wikipedia.org/wiki/Tertius_Chandler'>Tertius Chandler</a>'s 1987 book entitled <a href='http://mellenpress.com/mellenpress.cfm?bookid=4252&pc=9'>Four Thousand Years of Urban Growth: An Historical Census</a>. Chandler's work was merged, and updated with, data from <a href='http://www.esri.com'>Esri</a> and <a href='https://www.wikipedia.org/'>Wikipedia</a>.</p>
+                <p>Special thanks to <a href='https://www.linkedin.com/in/witold-fraczek-30671b4'>Witold Frączek</a> and <a href='https://twitter.com/carol_a_sousa'>Carol Sousa</a> for geolocating, verifying and updating the city database.</p>
+                <p>Souce code for this application can be downloaded from <a href='https://github.com/richiecarmichael/Esri-Urban-Growth'>here</a>.</p>
+            </div>
+            <div class='dialog-buttons'>
+                <div class='dialog-button close'>Close</div>
+            </div>
+        </div>
+    </div>
+    <div id='loading'>Loading...</div>
+</body>
+</html>
