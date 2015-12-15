@@ -91,7 +91,7 @@ function (
         };
 
         // Constants
-        var PROXY = 'proxy.ashx';
+        var PROXY = 'http://maps.esri.com/rc/urban/proxy.ashx';
         var WIKI = 'https://en.wikipedia.org/w/api.php';
         var BASEMAP = 'http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer';
         var DATE_MIN = 0;              // Chart's start date
