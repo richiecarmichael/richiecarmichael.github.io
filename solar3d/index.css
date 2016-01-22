@@ -1,0 +1,230 @@
+﻿/* -----------------------------------------------------------------------------------
+   Developed by the Applications Prototype Lab
+   (c) 2016 Esri | http://www.esri.com/legal/software-license  
+----------------------------------------------------------------------------------- */
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+#top {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    pointer-events:none;
+}
+
+.esri-ui-corner {
+    margin-top: 65px;
+}
+
+#logo {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 50px;
+}
+
+#heading {
+    position: absolute;
+    left: 100px;
+    right: 100px;
+    top: 5px;
+    text-align: center;
+    font-family: 'Berkshire Swash', cursive;
+    font-size: 34px;
+    color: #fff;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+#buttons {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.button {
+    display: inline-block;
+    width: 50px;
+    height:50px;
+    cursor: pointer;
+    pointer-events: all;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 1px;
+}
+.button > i {
+    margin-left: 15px;
+    margin-top: 10px;
+}
+.button:hover {
+    background-color:rgba(255, 255, 255, 0.5);
+    color: rgba(255, 0, 0, 0.5);
+}
+
+#map {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background-color: #000;
+}
+
+#chart {
+    position: absolute;
+    height: 200px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.1);
+    pointer-events:none;
+}
+
+#chart g.axis line,
+#chart g.axis path
+{
+    fill: none;
+    stroke: rgb(255, 255, 255);
+    stroke-width: 1px;
+}
+
+#chart g.axis text  {
+    fill: rgb(255, 255, 255);
+    stroke: none;
+    pointer-events: none;
+}
+
+#chart circle.eclipse {
+    fill: rgb(255, 255, 255);
+    stroke: none;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+#chart circle.eclipse.selected {
+    fill: #f00;
+}
+
+#chart circle.eclipse.hover{
+    fill: #0ff;
+}
+
+#chart circle.eclipse.disabled {
+    pointer-events: none;
+}
+
+#chart polygon.pointer {
+    fill: #f00;
+    stroke: none;
+    pointer-events: all;
+    cursor: col-resize;
+    opacity: 0.5
+}
+
+.rcHeading {
+    display: inline-block;
+    width: 100px;
+    font-weight:700;
+}
+
+.rcValue{
+    display: inline-block;
+}
+
+.dialog {
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog > div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 520px;
+    margin-left: -250px;
+    margin-top: -260px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dialog-banner {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 1);
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    padding-top: 5px;
+}
+
+.dialog-description {
+    font-size: 16px;
+    margin: 60px 15px 15px 15px;
+    color: rgba(255, 255, 255, 1);
+}
+
+.dialog-description a {
+    /*color: #cafbf8;*/
+    color: #ffc0cb;
+}
+
+.dialog-description a:link,
+.dialog-description a:visited {   
+    text-decoration: none;
+}
+
+.dialog-description a:hover,
+.dialog-description a:active {
+    text-decoration:  underline;
+}
+
+.dialog-description ul {
+    list-style-type: disc;
+}
+
+.dialog-buttons {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.dialog-button {
+    display: inline-block;
+    width: 75px;
+    height:30px;
+    cursor: pointer;
+    pointer-events: all;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: all;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 10px;
+}
+
