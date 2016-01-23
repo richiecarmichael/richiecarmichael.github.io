@@ -41,15 +41,13 @@ function (
         };
 
         // Application constants
-        //var SOLAR = 'https://gd3d.esri.com/server/rest/services/Hosted/SolarEclipse_WSL/FeatureServer/0';
-        //var SOLAR = 'https://gd3d.esri.com/server/rest/services/Hosted/SolarEclipse_WSL/SceneServer';
         var SOLAR = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SolarEclipsePath/FeatureServer/0';
         var GEOMETRYPRECISION = 2;
         var MAXALLOWABLEOFFSET = 0.1;
         var OFFSET = 200000;
         var DATE_MIN = 1600;
         var DATE_MAX = 2200;
-        var DATE_STA = 2017;
+        var DATE_STA = 2016;
         var DURATION_MIN = 0;
         var DURATION_MAX = 800;
         var POINTER_WIDTH = 10; // years
@@ -130,94 +128,8 @@ function (
                 ]
             })
         });
-        _view.on('click', function (e) {
-            // Hide popup if nothing clicked
-            if (!e.graphic) {
-                _view.popup.viewModel.visible = false;
-                return;
-            }
-
-            // Construct popup title
-            var title = '';
-            switch (e.graphic.attributes.EclType) {
-                case 'A':
-                    title = 'Annular Solar Eclipse';
-                    break;
-                case 'H':
-                    title = 'Hybrid Solar Eclipse';
-                    break;
-                case 'T':
-                    title = 'Total Solar Eclipse';
-                    break;
-                default:
-                    title = 'Solar Eclipse';
-                    break;
-            }
-
-            // Construct content
-            var TEMPLATE = '<div><div class="rcHeading">{0}</div><div class="rcValue">{1}</div></div>';
-            var content = '';
-            content += $.format(TEMPLATE, [
-                'Date',
-                new Date(e.graphic.attributes.Date).toLocaleDateString()
-            ]);
-            content += $.format(TEMPLATE, [
-                'Time',
-                new Date(e.graphic.attributes.TimeGE).toLocaleTimeString()
-            ]);
-            content += $.format(TEMPLATE, [
-                'Duration',
-                e.graphic.attributes.DurationSeconds + ' seconds'
-            ]);
-            content += $.format(TEMPLATE, [
-                'Width',
-                e.graphic.attributes.PathWid + ' km'
-            ]);
-            content += $.format(TEMPLATE, [
-                'Magnitude',
-                e.graphic.attributes.EclMagn
-            ]);
-            content += $.format(TEMPLATE, [
-                'Sun Altitude',
-                e.graphic.attributes.SunAlt + '°'
-            ]);
-            content += $.format(TEMPLATE, [
-                'Sun Azimuth',
-                e.graphic.attributes.SunAzi + '°'
-            ]);
-            content += $.format(TEMPLATE, [
-                'Lunation',
-                e.graphic.attributes.Lunation
-            ]);
-            content += $.format(TEMPLATE, [
-                'Saros Cycle',
-                e.graphic.attributes.Saro
-            ]);
-            content += $.format(TEMPLATE, [
-                'Gamma',
-                e.graphic.attributes.Gamma
-            ]);
-            content += $.format(TEMPLATE, [
-                'Delta-T',
-                e.graphic.attributes.DT + ' seconds'
-            ]);
-
-            // Update and display popup
-            _view.popup.viewModel.set({
-                docked: false,
-                title: title,
-                content: content,
-                location: e.mapPoint,
-                visible: true
-            });
-        });
         _view.then(function () {
             //return;
-            //var d1 = downloadData(0, 200);
-            //var d2 = downloadData(0, 200);
-            //var d3 = downloadData(0, 200);
-            //var d4 = downloadData(0, 200);
-            //var d5 = downloadData(0, 200);
             $.when(
                 downloadData(0, 200),
                 downloadData(200, 200),
@@ -225,6 +137,9 @@ function (
                 downloadData(600, 200),
                 downloadData(800, 200)
                 ).done(function (v1, v2, v3, v4, v5) {
+                    // Change loading message
+                    $('.loading-message').html('Loading data...');
+
                     // Concatenate all graphics
                     _paths = [].concat.call(v1, v2, v3, v4, v5);
 
@@ -240,6 +155,18 @@ function (
                             drawChart();
                         }
                     }));
+
+                    // Hide loading dialog
+                    $('.loading').hide();
+
+                    // Show chart
+                    $('#chart').animate({
+                        'margin-bottom': '0px'
+                    }, {
+                        duration: 400,
+                        easing: 'swing',
+                        queue: false
+                    });
                 }
             );
         });
@@ -263,6 +190,9 @@ function (
                     _selected = null;
                     _view.map.getLayer('highlight').clear();
                     d3.selectAll('#chart circle.eclipse').classed({ hover: false }).attr('r', 3);
+
+                    //
+                    hideInfomationPanel();
                     return;
                 }
 
@@ -270,7 +200,6 @@ function (
                 if (p.graphic && _selected) {
                     // Same graphic selected
                     if (_selected === p.graphic.attributes.OBJECTID) {
-                        
                         return;
                     }
 
@@ -291,6 +220,9 @@ function (
                             return d.attributes.OBJECTID === _selected ? 5 : 3;
                         });
 
+                    //
+                    showInfomationPanel(p.graphic);
+
                     return;
                 }
 
@@ -309,21 +241,66 @@ function (
                             hover: true
                         })
                         .attr('r', 5);
+
+                    //
+                    showInfomationPanel(p.graphic);
                     return;
                 }
             });
         }));
 
         $('#button-help').click(function () {
-            $('#help-about').fadeIn();
+            $('#window-help').fadeIn();
+            $('#top').animate({
+                'margin-top': '-50px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
+            $('#chart').animate({
+                'margin-bottom': '-200px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
         });
 
         $('#button-about').click(function () {
             $('#window-about').fadeIn();
+            $('#top').animate({
+                'margin-top':'-50px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
+            $('#chart').animate({
+                'margin-bottom':'-200px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
         });
 
         $('.dialog .close').click(function () {
             $(this).parents('.dialog').fadeOut();
+            $('#top').animate({
+                'margin-top': '0px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
+            $('#chart').animate({
+                'margin-bottom': '0px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
         });
 
         $('a').attr('target', '_blank');
@@ -439,7 +416,8 @@ function (
                 .text('Duration (s)');
 
             // Add the pointer
-            var pointer = svg.append('g')
+            var dragOffset = 0;
+            svg.append('g')
                 .attr('transform', $.format('translate({0},{1})', [
                     margin.left,
                     margin.top
@@ -448,13 +426,13 @@ function (
                 .classed({
                     pointer: true
                 })
+                .attr('transform', $.format('translate({0},{1})', [x(_currentTime), 0]))
                 .attr('points', $.format('{0},{1} {2},{3} {4},{5} {6},{7}', [
                     x(DATE_MIN), y(DURATION_MIN),
                     x(DATE_MIN), y(DURATION_MAX),
                     x(DATE_MIN + POINTER_WIDTH), y(DURATION_MAX),
                     x(DATE_MIN + POINTER_WIDTH), y(DURATION_MIN)
                 ]))
-                .attr('transform', $.format('translate({0},{1})', [x(_currentTime), 0]))
                 .call(d3.behavior.drag()
                     .on('dragstart', function () {
                         // Suppress drag events
@@ -465,14 +443,19 @@ function (
                         d3.selectAll('#chart circle.eclipse').classed({
                             disabled: true
                         });
+
+                        //
+                        dragOffset = x.invert(d3.mouse(this.parentNode)[0]) - _currentTime;
                     })
                     .on('drag', function () {
-                        // Get mouse location. Exit if mouse beyond chart bounds.
-                        var mouse = d3.mouse(this.parentNode)[0];
-                        if (mouse < 0 || mouse > width) { return; }
-
-                        // Update current time
-                        _currentTime = x.invert(mouse);
+                        //var mouse = d3.mouse(this.parentNode)[0];
+                        _currentTime = x.invert(d3.mouse(this.parentNode)[0]);
+                        _currentTime -= dragOffset;
+                        if (_currentTime < DATE_MIN) {
+                            _currentTime = DATE_MIN;
+                        } else if (_currentTime > DATE_MAX - POINTER_WIDTH) {
+                            _currentTime = DATE_MAX - POINTER_WIDTH;
+                        }
 
                         // Move time pointer
                         movePointer();
@@ -518,13 +501,19 @@ function (
                         attributes: d.attributes,
                         geometry: d.geometry
                     }));
+
+                    //
+                    showInfomationPanel(d);
                 })
-                .on('mouseleave', function (d) {
+                .on('mouseleave', function () {
                     // Restore dot's color and size
                     d3.select(this).classed({ hover: false }).attr('r', 3);
 
                     // Remove highlighted eclipse path
                     _view.map.getLayer('highlight').clear();
+
+                    //
+                    hideInfomationPanel();
                 })
                 .on('click', function (d) {
                     // Update current time
@@ -538,11 +527,23 @@ function (
                     });
 
                     // Move time pointer
-                    movePointer()
+                    movePointer();
                     
                     // Draw selected eclipses on globe
                     drawEclipses();
                 });
+
+            // Add year range title
+            svg.append('g')
+                .attr('transform', $.format('translate({0},{1})', [
+                    margin.left,
+                    margin.top
+                ]))
+                .classed({
+                    title: true
+                })
+                .append('text')
+                .style('text-anchor', 'middle');
 
             // Position the pointer and select graphics
             movePointer();
@@ -552,10 +553,22 @@ function (
 
             function movePointer() {
                 // Move red timeline into position
-                pointer.attr('transform', $.format('translate({0},{1})', [
+                d3.select('#chart polygon.pointer').attr('transform', $.format('translate({0},{1})', [
                     x(_currentTime),
                     0
                 ]));
+
+                // Update time window extent text
+                d3.select('#chart g.title text')
+                    .attr('transform', $.format('translate({0},{1})', [
+                        x(_currentTime + POINTER_WIDTH/2),
+                        -2
+                    ]))
+                    .text($.format('{0}–{1}', [
+                        d3.round(_currentTime),
+                        d3.round(_currentTime) + POINTER_WIDTH
+                    ])
+                );
             }
 
             function drawEclipses() {
@@ -579,6 +592,56 @@ function (
                 _view.map.getLayer('solar').clear();
                 _view.map.getLayer('solar').add(graphics);
             }
+        }
+
+        function showInfomationPanel(graphic) {
+            $('#panel').animate({
+                'margin-right': '0px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
+
+            // Update title
+            switch (graphic.attributes.EclType) {
+                case 'A':
+                    $('#panel-title').html('Annular Solar Eclipse');
+                    break;
+                case 'H':
+                    $('#panel-title').html('Hybrid Solar Eclipse');
+                    break;
+                case 'T':
+                    $('#panel-title').html('Total Solar Eclipse');
+                    break;
+                default:
+                    $('#panel-title').html('Solar Eclipse');
+                    break;
+            }
+
+            // Update attributes in table
+            $('#panel .value:eq(0)').html(new Date(graphic.attributes.Date).toLocaleDateString());
+            $('#panel .value:eq(1)').html(new Date(graphic.attributes.TimeGE).toLocaleTimeString());
+            $('#panel .value:eq(2)').html(graphic.attributes.DurationSeconds + ' seconds');
+            $('#panel .value:eq(3)').html(graphic.attributes.PathWid + ' km');
+            $('#panel .value:eq(4)').html(graphic.attributes.EclMagn);
+            $('#panel .value:eq(5)').html(graphic.attributes.SunAlt + '°');
+            $('#panel .value:eq(6)').html(graphic.attributes.SunAzi + '°');
+            $('#panel .value:eq(7)').html(graphic.attributes.Lunation);
+            $('#panel .value:eq(8)').html(graphic.attributes.Saro);
+            $('#panel .value:eq(9)').html(graphic.attributes.Gamma);
+            $('#panel .value:eq(10)').html(graphic.attributes.DT + ' seconds');
+
+        }
+
+        function hideInfomationPanel() {
+            $('#panel').animate({
+                'margin-right': '-200px'
+            }, {
+                duration: 400,
+                easing: 'swing',
+                queue: false
+            });
         }
     });
 });
