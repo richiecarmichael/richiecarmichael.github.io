@@ -7,20 +7,16 @@
 require([
     'esri/map',
     'esri/layers/ArcGISImageServiceLayer',
-    'esri/layers/RasterFunction',
     'esri/geometry/Extent',
     'esri/geometry/ScreenPoint',
-    //'esri/urlUtils',
     'esri/dijit/Search',
     'dojo/domReady!'
 ],
 function (
     Map,
     ArcGISImageServiceLayer,
-    RasterFunction,
     Extent,
     ScreenPoint,
-    //urlUtils,
     Search
     ) {
     $(document).ready(function () {
@@ -135,9 +131,6 @@ function (
 	    s.startup();
 
         var preview = new ArcGISImageServiceLayer(PREVIEW);
-        preview.setRenderingRule(new RasterFunction({
-            rasterFunction: 'Agriculture with DRA'
-        }));
 
         // Add bookmark images
         $.each(BOOKMARKS, function () {
@@ -291,15 +284,13 @@ function (
         });
 
         // Equivalent to "bring to front", this jquery extension will promote an element above all siblings in terms of z-index.
-        jQuery.fn.extend({
-            bringToFont: function (selector) {
-                var max = Math.max.apply(null, $(this).siblings(selector).map(function () {
-                    return $(this).zIndex();
-                }));
-                $(this).zIndex(++max);
-                return this;
-            }
-        });
+        $.fn.bringToFont = function (selector) {
+            var max = Math.max.apply(null, $(this).siblings(selector).map(function () {
+                return $(this).zIndex();
+            }));
+            $(this).zIndex(++max);
+            return this;
+        }
 
         // This function create and manages the lens window 
         function createLens(map, image) {
