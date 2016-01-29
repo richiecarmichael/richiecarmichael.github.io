@@ -44,7 +44,6 @@ function (
         var SOLAR = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SolarEclipsePath/FeatureServer/0';
         var GEOMETRYPRECISION = 2;
         var MAXALLOWABLEOFFSET = 0.1;
-        var OFFSET = 200000;
         var DATE_MIN = 1600;
         var DATE_MAX = 2200;
         var DATE_STA = 2016;
@@ -55,7 +54,7 @@ function (
         // Application variables
         var _paths = null;
         var _currentTime = DATE_STA;
-        var _selected = null;
+        //var _selected = null;
 
         // Create map and view
         var _view = new SceneView({
@@ -91,15 +90,15 @@ function (
                         // Graphics from this layer will be toggled on/off with the 'visible' property
                         id: 'solar',
                         elevationInfo: {
-                            mode: 'absoluteHeight',
-                            offset: OFFSET
+                            mode: 'onTheGround'
                         },
                         renderer: new SimpleRenderer({
                             symbol: new PolygonSymbol3D({
                                 symbolLayers: [
                                     new FillSymbol3DLayer({
                                         material: {
-                                            color: 'rgba(255, 255, 255, 0.5)'
+                                            //color: 'rgba(255, 255, 255, 0.5)'
+                                            color: 'rgba(255, 165, 0, 0.5)'
                                         }
                                     })
                                 ]
@@ -110,15 +109,14 @@ function (
                         // This layer will be used to simulate selection
                         id: 'highlight',
                         elevationInfo: {
-                            mode: 'absoluteHeight',
-                            offset: OFFSET
+                            mode: 'onTheGround'
                         },
                         renderer: new SimpleRenderer({
                             symbol: new PolygonSymbol3D({
                                 symbolLayers: [
                                     new FillSymbol3DLayer({
                                         material: {
-                                            color: 'rgba(0, 255, 255, 1)'
+                                            color: 'rgba(0, 255, 255, 0.5)'
                                         }
                                     })
                                 ]
@@ -170,84 +168,106 @@ function (
                 }
             );
         });
+        _view.on('click', function (e) {
+            // Something is not right. Exit.
+            if (!e) { return; }
 
-        $('#map').mousemove($.throttle(50, function (e) {
-            // Exit if view not initialized
-            if (!_view || !_view.ready) { return; }
+            // Clear selection
+            _view.map.getLayer('highlight').clear();
 
-            _view.hitTest(e.offsetX, e.offsetY).then(function (p) {
-                // Nothing found. Clear selection (if any).
-                if (!p) { return; }
-
-                // Nothing found and nothing previously selected.
-                if (!p.graphic && !_selected) {
-                    return;
-                }
-
-                // Nothing found and existing selection.
-                if (!p.graphic && _selected) {
-                    // Remove old selection.
-                    _selected = null;
-                    _view.map.getLayer('highlight').clear();
-                    d3.selectAll('#chart circle.eclipse').classed({ hover: false }).attr('r', 3);
-
-                    //
-                    hideInfomationPanel();
-                    return;
-                }
-
-                // Graphic found and something already selected.
-                if (p.graphic && _selected) {
-                    // Same graphic selected
-                    if (_selected === p.graphic.attributes.OBJECTID) {
-                        return;
-                    }
-
-                    // New graphic selected.
-                    _selected = p.graphic.attributes.OBJECTID;
-                    _view.map.getLayer('highlight').clear();
-                    _view.map.getLayer('highlight').add(new Graphic({
-                        attributes: p.graphic.attributes,
-                        geometry: p.graphic.geometry
-                    }));
-                    d3.selectAll('#chart circle.eclipse')
-                        .classed({
-                            hover: function (d) {
-                                return d.attributes.OBJECTID === _selected;
-                            }
-                        })
-                        .attr('r', function (d) {
-                            return d.attributes.OBJECTID === _selected ? 5 : 3;
-                        });
-
-                    //
-                    showInfomationPanel(p.graphic);
-
-                    return;
-                }
-
-                // New selection
-                if (p.graphic && !_selected) {
-                    _selected = p.graphic.attributes.OBJECTID;
-                    _view.map.getLayer('highlight').add(new Graphic({
-                        attributes: p.graphic.attributes,
-                        geometry: p.graphic.geometry
-                    }));
-                    d3.selectAll('#chart circle.eclipse')
-                        .filter(function (d) {
-                            return d.attributes.OBJECTID === _selected;
-                        })
-                        .classed({
-                            hover: true
-                        })
-                        .attr('r', 5);
-
-                    //
-                    showInfomationPanel(p.graphic);
-                    return;
-                }
+            // Find intersecting path (if any)
+            var g = _view.map.getLayer('solar').graphics.find(function (item) {
+                return item.geometry.contains(e.mapPoint);
             });
-        }));
+            if (!g) { return;}
+
+            // Highlight clicked path.
+            _view.map.getLayer('highlight').add(new Graphic({
+                attributes: g.attributes,
+                geometry: g.geometry
+            }));
+
+            // Show slide-in info panel.
+            showInfomationPanel(g);
+        });
+
+        //$('#map').mousemove($.throttle(50, function (e) {
+        //    // Exit if view not initialized
+        //    if (!_view || !_view.ready) { return; }
+
+        //    _view.hitTest(e.offsetX, e.offsetY).then(function (p) {
+        //        // Nothing found. Clear selection (if any).
+        //        if (!p) { return; }
+
+        //        // Nothing found and nothing previously selected.
+        //        if (!p.graphic && !_selected) {
+        //            return;
+        //        }
+
+        //        // Nothing found and existing selection.
+        //        if (!p.graphic && _selected) {
+        //            // Remove old selection.
+        //            _selected = null;
+        //            _view.map.getLayer('highlight').clear();
+        //            d3.selectAll('#chart circle.eclipse').classed({ hover: false }).attr('r', 3);
+
+        //            //
+        //            hideInfomationPanel();
+        //            return;
+        //        }
+
+        //        // Graphic found and something already selected.
+        //        if (p.graphic && _selected) {
+        //            // Same graphic selected
+        //            if (_selected === p.graphic.attributes.OBJECTID) {
+        //                return;
+        //            }
+
+        //            // New graphic selected.
+        //            _selected = p.graphic.attributes.OBJECTID;
+        //            _view.map.getLayer('highlight').clear();
+        //            _view.map.getLayer('highlight').add(new Graphic({
+        //                attributes: p.graphic.attributes,
+        //                geometry: p.graphic.geometry
+        //            }));
+        //            d3.selectAll('#chart circle.eclipse')
+        //                .classed({
+        //                    hover: function (d) {
+        //                        return d.attributes.OBJECTID === _selected;
+        //                    }
+        //                })
+        //                .attr('r', function (d) {
+        //                    return d.attributes.OBJECTID === _selected ? 5 : 3;
+        //                });
+
+        //            //
+        //            showInfomationPanel(p.graphic);
+
+        //            return;
+        //        }
+
+        //        // New selection
+        //        if (p.graphic && !_selected) {
+        //            _selected = p.graphic.attributes.OBJECTID;
+        //            _view.map.getLayer('highlight').add(new Graphic({
+        //                attributes: p.graphic.attributes,
+        //                geometry: p.graphic.geometry
+        //            }));
+        //            d3.selectAll('#chart circle.eclipse')
+        //                .filter(function (d) {
+        //                    return d.attributes.OBJECTID === _selected;
+        //                })
+        //                .classed({
+        //                    hover: true
+        //                })
+        //                .attr('r', 5);
+
+        //            //
+        //            showInfomationPanel(p.graphic);
+        //            return;
+        //        }
+        //    });
+        //}));
 
         $('#button-help').click(function () {
             $('#window-help').fadeIn();
@@ -311,7 +331,7 @@ function (
                 start: start,
                 num: num,
                 returnGeometry: true,
-                multipatchOption: 'xyFootprint',
+                //multipatchOption: 'xyFootprint',
                 geometryPrecision: GEOMETRYPRECISION,
                 maxAllowableOffset: MAXALLOWABLEOFFSET,
                 outFields: [
@@ -531,6 +551,15 @@ function (
                     
                     // Draw selected eclipses on globe
                     drawEclipses();
+
+                    // Highlight clicked path.
+                    _view.map.getLayer('highlight').add(new Graphic({
+                        attributes: d.attributes,
+                        geometry: d.geometry
+                    }));
+
+                    // Show slide-in info panel.
+                    showInfomationPanel(d);
                 });
 
             // Add year range title
@@ -552,6 +581,10 @@ function (
             drawEclipses();
 
             function movePointer() {
+                // Clear selection
+                hideInfomationPanel();
+                _view.map.getLayer('highlight').clear();
+
                 // Move red timeline into position
                 d3.select('#chart polygon.pointer').attr('transform', $.format('translate({0},{1})', [
                     x(_currentTime),
@@ -631,7 +664,6 @@ function (
             $('#panel .value:eq(8)').html(graphic.attributes.Saro);
             $('#panel .value:eq(9)').html(graphic.attributes.Gamma);
             $('#panel .value:eq(10)').html(graphic.attributes.DT + ' seconds');
-
         }
 
         function hideInfomationPanel() {
