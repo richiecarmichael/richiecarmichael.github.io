@@ -54,7 +54,6 @@ function (
         // Application variables
         var _paths = null;
         var _currentTime = DATE_STA;
-        //var _selected = null;
 
         // Create map and view
         var _view = new SceneView({
@@ -179,7 +178,14 @@ function (
             var g = _view.map.getLayer('solar').graphics.find(function (item) {
                 return item.geometry.contains(e.mapPoint);
             });
-            if (!g) { return;}
+            if (!g) {
+                d3.selectAll('#chart circle.eclipse')
+                .classed({
+                    hover: false
+                })
+                .attr('r', 3);
+                return;
+            }
 
             // Highlight clicked path.
             _view.map.getLayer('highlight').add(new Graphic({
@@ -189,6 +195,17 @@ function (
 
             // Show slide-in info panel.
             showInfomationPanel(g);
+
+            //
+            d3.selectAll('#chart circle.eclipse')
+                .classed({
+                    hover: function (d) {
+                        return d.attributes.OBJECTID === g.attributes.OBJECTID;
+                    }
+                })
+                .attr('r', function (d) {
+                    return d.attributes.OBJECTID === g.attributes.OBJECTID ? 5 : 3;
+                });
         });
 
         //$('#map').mousemove($.throttle(50, function (e) {
