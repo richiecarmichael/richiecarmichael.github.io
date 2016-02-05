@@ -182,10 +182,11 @@ function (
             });
             if (!g) {
                 d3.selectAll('#chart circle.eclipse')
-                .classed({
-                    hover: false
-                })
-                .attr('r', 3);
+                    .classed({
+                        hover: false
+                    })
+                    .attr('r', 3);
+                hideInfomationPanel();
                 return;
             }
 

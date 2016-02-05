@@ -29,10 +29,6 @@ html, body {
     pointer-events:none;
 }
 
-.esri-ui-corner {
-    margin-top: 20px;
-}
-
 #logo {
     position: absolute;
     left: 0px;
@@ -92,8 +88,12 @@ html, body {
 #basemapToggle {
     position: absolute;
     top: 65px;
-    right: 15px;
+    left: 15px;
     z-index: 50;
+}
+
+.esri-ui-corner {
+    margin-top: 105px;
 }
 
 #panel {
