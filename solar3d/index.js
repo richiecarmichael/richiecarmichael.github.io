@@ -13,6 +13,8 @@ require([
     'esri/layers/GraphicsLayer',
     'esri/tasks/support/Query',
     'esri/tasks/QueryTask',
+    'esri/widgets/BasemapToggle',
+    'esri/widgets/BasemapToggle/BasemapToggleViewModel',
     'esri/views/SceneView',
     'dojo/domReady!'
 ],
@@ -26,6 +28,8 @@ function (
     GraphicsLayer,
     Query,
     QueryTask,
+    BasemapToggle,
+    BasemapToggleVM,
     SceneView
     ) {
     $(document).ready(function () {
@@ -96,7 +100,6 @@ function (
                                 symbolLayers: [
                                     new FillSymbol3DLayer({
                                         material: {
-                                            //color: 'rgba(255, 255, 255, 0.5)'
                                             color: 'rgba(255, 165, 0, 0.5)'
                                         }
                                     })
@@ -126,7 +129,6 @@ function (
             })
         });
         _view.then(function () {
-            //return;
             $.when(
                 downloadData(0, 200),
                 downloadData(200, 200),
@@ -208,83 +210,13 @@ function (
                 });
         });
 
-        //$('#map').mousemove($.throttle(50, function (e) {
-        //    // Exit if view not initialized
-        //    if (!_view || !_view.ready) { return; }
-
-        //    _view.hitTest(e.offsetX, e.offsetY).then(function (p) {
-        //        // Nothing found. Clear selection (if any).
-        //        if (!p) { return; }
-
-        //        // Nothing found and nothing previously selected.
-        //        if (!p.graphic && !_selected) {
-        //            return;
-        //        }
-
-        //        // Nothing found and existing selection.
-        //        if (!p.graphic && _selected) {
-        //            // Remove old selection.
-        //            _selected = null;
-        //            _view.map.getLayer('highlight').clear();
-        //            d3.selectAll('#chart circle.eclipse').classed({ hover: false }).attr('r', 3);
-
-        //            //
-        //            hideInfomationPanel();
-        //            return;
-        //        }
-
-        //        // Graphic found and something already selected.
-        //        if (p.graphic && _selected) {
-        //            // Same graphic selected
-        //            if (_selected === p.graphic.attributes.OBJECTID) {
-        //                return;
-        //            }
-
-        //            // New graphic selected.
-        //            _selected = p.graphic.attributes.OBJECTID;
-        //            _view.map.getLayer('highlight').clear();
-        //            _view.map.getLayer('highlight').add(new Graphic({
-        //                attributes: p.graphic.attributes,
-        //                geometry: p.graphic.geometry
-        //            }));
-        //            d3.selectAll('#chart circle.eclipse')
-        //                .classed({
-        //                    hover: function (d) {
-        //                        return d.attributes.OBJECTID === _selected;
-        //                    }
-        //                })
-        //                .attr('r', function (d) {
-        //                    return d.attributes.OBJECTID === _selected ? 5 : 3;
-        //                });
-
-        //            //
-        //            showInfomationPanel(p.graphic);
-
-        //            return;
-        //        }
-
-        //        // New selection
-        //        if (p.graphic && !_selected) {
-        //            _selected = p.graphic.attributes.OBJECTID;
-        //            _view.map.getLayer('highlight').add(new Graphic({
-        //                attributes: p.graphic.attributes,
-        //                geometry: p.graphic.geometry
-        //            }));
-        //            d3.selectAll('#chart circle.eclipse')
-        //                .filter(function (d) {
-        //                    return d.attributes.OBJECTID === _selected;
-        //                })
-        //                .classed({
-        //                    hover: true
-        //                })
-        //                .attr('r', 5);
-
-        //            //
-        //            showInfomationPanel(p.graphic);
-        //            return;
-        //        }
-        //    });
-        //}));
+        var toggle = new BasemapToggle({
+            viewModel: new BasemapToggleVM({
+                view: _view,
+                secondaryBasemap: 'osm'
+            })
+        }, 'basemapToggle');
+        toggle.startup();
 
         $('#button-help').click(function () {
             $('#window-help').fadeIn();
@@ -348,7 +280,6 @@ function (
                 start: start,
                 num: num,
                 returnGeometry: true,
-                //multipatchOption: 'xyFootprint',
                 geometryPrecision: GEOMETRYPRECISION,
                 maxAllowableOffset: MAXALLOWABLEOFFSET,
                 outFields: [
@@ -485,7 +416,6 @@ function (
                         dragOffset = x.invert(d3.mouse(this.parentNode)[0]) - _currentTime;
                     })
                     .on('drag', function () {
-                        //var mouse = d3.mouse(this.parentNode)[0];
                         _currentTime = x.invert(d3.mouse(this.parentNode)[0]);
                         _currentTime -= dragOffset;
                         if (_currentTime < DATE_MIN) {
