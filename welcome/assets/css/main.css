@@ -150,7 +150,8 @@ ul.contact li a:hover {
     background: #1a1f2c;
     background: rgba(18, 21, 29, 0.85);
     width: 100%;
-    padding: 1em;
+    padding: 0.5em;
+    text-align: center;
     font-weight: 400;
     line-height: 1em;
     z-index: 2;
