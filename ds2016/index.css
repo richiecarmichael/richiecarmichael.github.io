@@ -1,0 +1,27 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+    overflow:hidden;
+}
+
+body {
+    background-image: url('img/bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #434343;
+}
+
+#images {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    white-space: nowrap;
+}
+
+.rc-images {
+    display: inline-block;
+    height: 200px;
+}
