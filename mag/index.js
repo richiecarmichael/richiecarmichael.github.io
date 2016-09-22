@@ -72,7 +72,7 @@ function (
         _view.constraints.clipDistance.far *= 2;
 
         // Load wave layer
-        loadWaves()
+        loadWaves();
     });
 
     //

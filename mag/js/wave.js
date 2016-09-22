@@ -100,7 +100,7 @@
                 shininess: 70,
                 transparent: true,
                 opacity: 1
-            })
+            });
             scope.scene.add(new THREE.Mesh(g1, m1));
 
             // Magnetic Pole
@@ -113,7 +113,7 @@
                 shininess: 70,
                 transparent: true,
                 opacity: 1
-            })
+            });
             scope.scene.add(new THREE.Mesh(g, m));
             
             // Add magnetic waves
@@ -178,7 +178,6 @@
             if (this.long >= 180) {
                 this.long = -180;
             }
-
             this.view.set('camera', Camera.fromJSON({
                 'position': {
                     'x': this.long,
