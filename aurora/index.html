@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <!--
+        Copyright 2016 Esri
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
+    <title>Aurora</title>
+    <meta http-equiv='content-type' content='text/html;charset=utf-8' />
+    <meta name='author' content='Esri' />
+    <meta name='keywords' content='aurora webgl global animation esri' />
+    <meta name='description' content='' />
+    <meta name='robots' content='index,follow' />
+    <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link type='text/css' rel='stylesheet' href='css/bootstrap.min.css' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/4.1/esri/css/main.css' />
+    <link type='text/css' rel='stylesheet' href='index.css' />
+
+    <script type='text/javascript' src='js/jquery-3.1.1.min.js'></script>
+    <script type='text/javascript' src='js/three.min.js'></script>
+    <script type='text/javascript' src='//js.arcgis.com/4.1/'></script>
+    <script type='text/javascript' src='index.js'></script>
+</head>
+<body>
+    <div id='map'></div>
+    <div id='buttons' class='btn-group' role='group' aria-label='Click to change views'>
+        <button type='button' data-lattitude='15' data-altitude='100000000' data-tilt='0' class='btn btn-default active'>Equator</button>
+        <button type='button' data-lattitude='45' data-altitude='10000000' data-tilt='20' class='btn btn-default'>North Pole</button>
+        <button type='button' data-lattitude='-45' data-altitude='20000000' data-tilt='0' class='btn btn-default'>South Pole</button>
+    </div>
+</body>
+</html>
