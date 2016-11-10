@@ -1,7 +1,18 @@
-﻿/* ------------------------------------------------------------
-   Developed by the Applications Prototype Lab
-   (c) 2016 Esri | http://www.esri.com/legal/software-license  
---------------------------------------------------------------- */
+﻿/*    
+    Copyright 2016 Esri
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 require([
     'esri/Map',
@@ -35,14 +46,6 @@ function (
     $(document).ready(function () {
         // Enforce strict mode
         'use strict';
-
-        // jQuery formating function
-        $.format = function (f, e) {
-            $.each(e, function (i) {
-                f = f.replace(new RegExp('\\{' + i + '\\}', 'gm'), this);
-            });
-            return f;
-        };
 
         // Application constants
         var SOLAR = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SolarEclipsePath/FeatureServer/0';
@@ -93,7 +96,7 @@ function (
                         // Graphics from this layer will be toggled on/off with the 'visible' property
                         id: 'solar',
                         elevationInfo: {
-                            mode: 'onTheGround'
+                            mode: 'on-the-ground'
                         },
                         renderer: new SimpleRenderer({
                             symbol: new PolygonSymbol3D({
@@ -111,7 +114,7 @@ function (
                         // This layer will be used to simulate selection
                         id: 'highlight',
                         elevationInfo: {
-                            mode: 'onTheGround'
+                            mode: 'on-the-ground'
                         },
                         renderer: new SimpleRenderer({
                             symbol: new PolygonSymbol3D({
@@ -147,13 +150,15 @@ function (
 
                     // Reload chart if window resized
                     var width = $(window).width();
-                    $(window).resize($.debounce(250, function () {
+                    $(window).debounce('resize', function () {
+                        // Exit if width is unchanged
                         var w = $(window).width();
                         if (width !== w) {
                             width = w;
+                            // Reload chart
                             drawChart();
                         }
-                    }));
+                    }, 250);
 
                     // Hide loading dialog
                     $('.loading').hide();
@@ -174,24 +179,22 @@ function (
             if (!e) { return; }
 
             // Clear selection
-            _view.map.getLayer('highlight').clear();
+            _view.map.findLayerById('highlight').removeAll();
 
             // Find intersecting path (if any)
-            var g = _view.map.getLayer('solar').graphics.find(function (item) {
+            var g = _view.map.findLayerById('solar').graphics.find(function (item) {
                 return item.geometry.contains(e.mapPoint);
             });
             if (!g) {
                 d3.selectAll('#chart circle.eclipse')
-                    .classed({
-                        hover: false
-                    })
+                    .classed('hover', false)
                     .attr('r', 3);
                 hideInfomationPanel();
                 return;
             }
 
             // Highlight clicked path.
-            _view.map.getLayer('highlight').add(new Graphic({
+            _view.map.findLayerById('highlight').add(new Graphic({
                 attributes: g.attributes,
                 geometry: g.geometry
             }));
@@ -201,11 +204,11 @@ function (
 
             //
             d3.selectAll('#chart circle.eclipse')
-                .classed({
-                    hover: function (d) {
+                .classed(
+                    'hover', function (d) {
                         return d.attributes.OBJECTID === g.attributes.OBJECTID;
                     }
-                })
+                )
                 .attr('r', function (d) {
                     return d.attributes.OBJECTID === g.attributes.OBJECTID ? 5 : 3;
                 });
@@ -333,13 +336,13 @@ function (
                 .attr('height', height);
 
             // Define scales
-            var x = d3.scale.linear()
+            var x = d3.scaleLinear()
                 .domain([DATE_MIN, DATE_MAX])
                 .range([
                     0,
                     width - margin.left - margin.right
                 ]);
-            var y = d3.scale.linear()
+            var y = d3.scaleLinear()
                 .domain([DURATION_MIN, DURATION_MAX])
                 .range([
                     height - margin.top - margin.bottom,
@@ -347,20 +350,16 @@ function (
                 ]);
 
             // Define axises
-            var xaxis = d3.svg.axis()
-                .scale(x)
-                .orient('bottom')
+            var xaxis = d3.axisBottom(x)
                 .tickFormat(d3.format('g'));
-            var yaxis = d3.svg.axis()
-                .scale(y)
-                .orient('left')
+            var yaxis = d3.axisLeft(y)
                 .tickValues([0, 200, 400, 600, 800]);
 
             // Draw x-axis
             svg.append('g')
-                .classed({
-                    axis: true
-                })
+                .classed(
+                    'axis', true
+                )
                 .attr('transform', $.format('translate({0},{1})', [
                     margin.left,
                     height - margin.bottom
@@ -369,9 +368,9 @@ function (
 
             // Draw y-axis
             svg.append('g')
-                .classed({
-                    axis: true
-                })
+                .classed(
+                    'axis', true
+                )
                 .attr('transform', $.format('translate({0},{1})', [
                     margin.left,
                     margin.top
@@ -392,9 +391,9 @@ function (
                     margin.top
                 ]))
                 .append('polygon')
-                .classed({
-                    pointer: true
-                })
+                .classed(
+                    'pointer', true
+                )
                 .attr('transform', $.format('translate({0},{1})', [x(_currentTime), 0]))
                 .attr('points', $.format('{0},{1} {2},{3} {4},{5} {6},{7}', [
                     x(DATE_MIN), y(DURATION_MIN),
@@ -402,16 +401,16 @@ function (
                     x(DATE_MIN + POINTER_WIDTH), y(DURATION_MAX),
                     x(DATE_MIN + POINTER_WIDTH), y(DURATION_MIN)
                 ]))
-                .call(d3.behavior.drag()
-                    .on('dragstart', function () {
+                .call(d3.drag()
+                    .on('start', function () {
                         // Suppress drag events
                         d3.event.sourceEvent.stopPropagation();
                         d3.event.sourceEvent.preventDefault();
 
                         // Disable dot events
-                        d3.selectAll('#chart circle.eclipse').classed({
-                            disabled: true
-                        });
+                        d3.selectAll('#chart circle.eclipse').classed(
+                            'disabled', true
+                        );
 
                         //
                         dragOffset = x.invert(d3.mouse(this.parentNode)[0]) - _currentTime;
@@ -431,11 +430,11 @@ function (
                         // Draw selected eclipses on globe
                         drawEclipses();
                     })
-                    .on('dragend', function () {
+                    .on('end', function () {
                         // Restore event listening for all dots
-                        d3.selectAll('#chart circle.eclipse').classed({
-                            disabled: false
-                        });
+                        d3.selectAll('#chart circle.eclipse').classed(
+                            'disabled', false
+                        );
                     })
                 );
 
@@ -449,9 +448,9 @@ function (
                 .data(_paths)
                 .enter()
                 .append('circle')
-                .classed({
-                    eclipse: true
-                })
+                .classed(
+                    'eclipse', true
+                )
                 .attr('cx', function (d) {
                     var date = new Date(d.attributes.Date);
                     return x(date.getFullYear());
@@ -462,10 +461,10 @@ function (
                 .attr('r', 3)
                 .on('mouseenter', function (d) {
                     // Highlight dot
-                    d3.select(this).classed({ hover: true }).attr('r', 5);
+                    d3.select(this).classed('hover', true).attr('r', 5);
 
                     // Add highlighted eclipse path
-                    _view.map.getLayer('highlight').add(new Graphic({
+                    _view.map.findLayerById('highlight').add(new Graphic({
                         attributes: d.attributes,
                         geometry: d.geometry
                     }));
@@ -475,10 +474,10 @@ function (
                 })
                 .on('mouseleave', function () {
                     // Restore dot's color and size
-                    d3.select(this).classed({ hover: false }).attr('r', 3);
+                    d3.select(this).classed('hover', false).attr('r', 3);
 
                     // Remove highlighted eclipse path
-                    _view.map.getLayer('highlight').clear();
+                    _view.map.findLayerById('highlight').removeAll();
 
                     //
                     hideInfomationPanel();
@@ -501,7 +500,7 @@ function (
                     drawEclipses();
 
                     // Highlight clicked path.
-                    _view.map.getLayer('highlight').add(new Graphic({
+                    _view.map.findLayerById('highlight').add(new Graphic({
                         attributes: d.attributes,
                         geometry: d.geometry
                     }));
@@ -516,9 +515,9 @@ function (
                     margin.left,
                     margin.top
                 ]))
-                .classed({
-                    title: true
-                })
+                .classed(
+                    'title', true
+                )
                 .append('text')
                 .style('text-anchor', 'middle');
 
@@ -531,7 +530,7 @@ function (
             function movePointer() {
                 // Clear selection
                 hideInfomationPanel();
-                _view.map.getLayer('highlight').clear();
+                _view.map.findLayerById('highlight').removeAll();
 
                 // Move red timeline into position
                 d3.select('#chart polygon.pointer').attr('transform', $.format('translate({0},{1})', [
@@ -540,27 +539,30 @@ function (
                 ]));
 
                 // Update time window extent text
+                //var ccc = $.format('{0}–{1}', [
+                //        d3.round(_currentTime),
+                //        d3.round(_currentTime) + POINTER_WIDTH
+                //]);
                 d3.select('#chart g.title text')
                     .attr('transform', $.format('translate({0},{1})', [
-                        x(_currentTime + POINTER_WIDTH/2),
+                        x(_currentTime + POINTER_WIDTH / 2),
                         -2
                     ]))
                     .text($.format('{0}–{1}', [
-                        d3.round(_currentTime),
-                        d3.round(_currentTime) + POINTER_WIDTH
-                    ])
-                );
+                        d3.format('.0f')(_currentTime),
+                        d3.format('.0f')(_currentTime + POINTER_WIDTH)
+                    ]));
             }
 
             function drawEclipses() {
                 // Highlight eclipses within the pointer
-                d3.selectAll('#chart circle.eclipse').classed({
-                    selected: function (d) {
+                d3.selectAll('#chart circle.eclipse').classed(
+                    'selected', function (d) {
                         var date = new Date(d.attributes.Date);
                         var year = date.getFullYear();
                         return year >= _currentTime && year <= _currentTime + POINTER_WIDTH;
                     }
-                });
+                );
 
                 //
                 var graphics = [];
@@ -570,8 +572,8 @@ function (
                         geometry: d.geometry
                     }));
                 });
-                _view.map.getLayer('solar').clear();
-                _view.map.getLayer('solar').add(graphics);
+                _view.map.findLayerById('solar').removeAll();
+                _view.map.findLayerById('solar').addMany(graphics);
             }
         }
 
@@ -623,5 +625,39 @@ function (
                 queue: false
             });
         }
+
+
+        // jQuery formating function
+        $.format = function (f, e) {
+            $.each(e, function (i) {
+                f = f.replace(new RegExp('\\{' + i + '\\}', 'gm'), this);
+            });
+            return f;
+        };
+
+        // 
+        $.fn.debounce = function (on, func, threshold) {
+            var debounce = function (func, threshold, execAsap) {
+                var timeout;
+                return function debounced() {
+                    var obj = this;
+                    var args = arguments;
+                    function delayed() {
+                        if (!execAsap) {
+                            func.apply(obj, args);
+                        }
+                        timeout = null;
+                    }
+                    if (timeout) {
+                        clearTimeout(timeout);
+                    }
+                    else if (execAsap) {
+                        func.apply(obj, args);
+                    }
+                    timeout = setTimeout(delayed, threshold || 100);
+                };
+            };
+            $(this).on(on, debounce(func, threshold));
+        };
     });
 });
