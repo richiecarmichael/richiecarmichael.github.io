@@ -82,9 +82,9 @@ function (
 
         // Rotate the Earth
         window.setInterval(function () {
-            _long += 0.1;
-            if (_long >= 180) {
-                _long = -180;
+            _long -= 0.1;
+            if (_long <= -180) {
+                _long = 180;
             }
             var lat = $('#buttons > .btn.active').attr('data-lattitude');
             var alt = $('#buttons > .btn.active').attr('data-altitude');

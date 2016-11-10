@@ -100,7 +100,7 @@
                 shininess: 70,
                 transparent: true,
                 opacity: 1
-            });
+            })
             scope.scene.add(new THREE.Mesh(g1, m1));
 
             // Magnetic Pole
@@ -113,7 +113,7 @@
                 shininess: 70,
                 transparent: true,
                 opacity: 1
-            });
+            })
             scope.scene.add(new THREE.Mesh(g, m));
             
             // Add magnetic waves
@@ -147,6 +147,7 @@
                     scope.scene.add(torus);
                 }
             });
+
         },
         _updateCamera: function (context) {
             // Get Esri's camera
@@ -174,10 +175,11 @@
             this.ambientLight.intensity = ambient.intensity;
         },
         _updateObjects: function (context) {
-            this.long += 0.1;
-            if (this.long >= 180) {
-                this.long = -180;
+            this.long -= 0.1;
+            if (this.long <= -180) {
+                this.long = 180;
             }
+
             this.view.set('camera', Camera.fromJSON({
                 'position': {
                     'x': this.long,
