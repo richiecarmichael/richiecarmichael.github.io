@@ -40,7 +40,7 @@ function (
     Query,
     QueryTask,
     BasemapToggle,
-    BasemapToggleVM,
+    BasemapToggleViewModel,
     SceneView
     ) {
     $(document).ready(function () {
@@ -219,9 +219,9 @@ function (
         });
 
         var toggle = new BasemapToggle({
-            viewModel: new BasemapToggleVM({
+            viewModel: new BasemapToggleViewModel({
                 view: _view,
-                secondaryBasemap: 'osm'
+                nextBasemap: 'osm'
             })
         }, 'basemapToggle');
         toggle.startup();
@@ -630,7 +630,6 @@ function (
             });
         }
 
-
         // jQuery formating function
         $.format = function (f, e) {
             $.each(e, function (i) {
@@ -639,7 +638,7 @@ function (
             return f;
         };
 
-        // 
+        // jQuery debounce function
         $.fn.debounce = function (on, func, threshold) {
             var debounce = function (func, threshold, execAsap) {
                 var timeout;
