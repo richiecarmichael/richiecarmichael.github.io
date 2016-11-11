@@ -84,13 +84,17 @@ function (
                 // Disable lighting and stars
                 lighting: {
                     directShadows: false,
-                    ambientOcclusion: false
+                    ambientOcclusion: false,
+                    cameraTrackingEnabled: true
                 },
-                atmosphere: 'default',
-                stars: 'none'
+                atmosphereEnabled: true,
+                atmosphere: {
+                    quality: 'high'
+                },
+                starsEnabled: false
             },
             map: new Map({
-                basemap: 'satellite',
+                basemap: 'hybrid',
                 layers: [
                     new GraphicsLayer({
                         // Graphics from this layer will be toggled on/off with the 'visible' property
