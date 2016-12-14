@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--
+
+      Copyright 2016 Esri
+
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at:
+      http://www.apache.org/licenses/LICENSE-2.0
+
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+
+    -->
+    <title>Esri | Prototype Lab | Landsat for Pivot</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="author" content="Applications Prototype Lab" />
+    <link type="image/ico" rel="shortcut icon" href="favicon.ico" />
+    <link type="image/ico" rel="icon" href="favicon.ico" />
+    <link href="content/images/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link type="text/css" rel="stylesheet" href="//js.arcgis.com/3.7/js/esri/css/esri.css">
+    <link type="text/css" rel="stylesheet" href="//fast.fonts.com/cssapi/23855eec-5fdf-4594-9898-0113a04bfef0.css" />
+    <link type="text/css" rel="stylesheet" href="content/pivotviewer-0.9.34.min.css" />
+    <link type="text/html" rel="template" href="content/pivotviewer-0.9.34.templates.min.html" id="pv-templates" />
+    <link type="text/css" rel="stylesheet" href="index.css">
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.10.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="js/jquery.nouislider.min.js"></script>
+    <script type="text/javascript" src="js/easing.min.js"></script>
+    <script type="text/javascript" src="js/ICanHaz-no-mustache.min.js"></script>
+    <script type="text/javascript" src="js/mobiscroll-2.0.2.custom.min.js"></script>
+    <script type="text/javascript" src="js/modernizr.custom.js"></script>
+    <script type="text/javascript" src="js/mustache.min.js"></script>
+    <script type="text/javascript" src="js/pubsub.min.js"></script>
+    <script type="text/javascript" src="js/pivotviewer-0.9.34.min.js"></script>
+    <script type="text/javascript" src="//js.arcgis.com/3.9compact/"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-8', 'esri.com');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id="top">
+        <div id="heading">Landsat Pivot Viewer</div>
+    </div>
+    <div id="topleft">
+        <button type="button" class="rc-button" id="buttonBack">back</button>
+    </div>
+    <div id="map"></div>
+    <div id="bottom">
+        <div id="container1">
+            <div id="description">To select landsat scenes, press draw and then draw a rectangle on the map.</div>
+            <button type="button" class="rc-button" id="buttonDraw">draw</button>
+        </div>
+        <div id="container2">
+            <div id="imagecount"></div>
+            <button type="button" class="rc-button" id="buttonClear">clear</button>
+            <button type="button" class="rc-button" id="buttonPivot">pivot</button>
+        </div>
+    </div>
+    <div id="page"></div>
+    <div id="about">
+        <div id="about-banner">
+            <div id="about-banner-text">
+                About This App
+            </div>
+        </div>
+        <button type="button" class="rc-button" id="buttonAbout"></button>
+        <div id="about-body">
+            <a href="http://www.esri.com">
+                <img src="content/images/esri-transparent.png" height="100" />
+            </a>
+            <p>
+                This app was designed and developed by Esri's <a href="http://blogs.esri.com/esri/apl">Prototype Lab</a> in Redlands, California. Mapping technology is provided by the <a href="https://developers.arcgis.com/javascript/">ArcGIS API for JavaScript</a>.
+            </p>
+            <a href="http://lobsterpot.com.au">
+                <img src="content/images/lobsterpot.png" height="100" />
+            </a>
+            <p>
+                The LobsterPot <a href="http://lobsterpot.com.au/pivotviewer">HTML5 PivotViewer</a> is a cross browser, cross platform version of the Silverlight PivotViewer control produced by Microsoft. <a href="http://lobsterpot.com.au">LobsterPot Solutions</a> is a Microsoft Gold Certified Partner based in Adelaide, Australia.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

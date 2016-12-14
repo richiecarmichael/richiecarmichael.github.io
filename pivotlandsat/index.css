@@ -1,0 +1,199 @@
+﻿/* ------------------------------------------------------------
+
+   Copyright 2016 Esri
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at:
+   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+--------------------------------------------------------------- */
+
+html, body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: #ffffff;
+    font-family: "Avenir LT W01 35 Light", Arial, Helvetica, sans-serif;
+}
+
+#map {
+    position: absolute;
+    top: 60px;
+    bottom: 60px;
+    width: 100%;
+}
+
+#top {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background: #2D6CA2;
+}
+
+#topleft {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    width: auto;
+    height: 60px;
+}
+
+#heading {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 36px;
+}
+
+#bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: #2D6CA2;
+}
+
+#container1 {
+    margin: 0 auto;
+    min-width: 0;
+    max-width: 500px;
+    width: 100%;
+}
+
+#description {
+    display: inline-block;
+    margin-top: 5px;
+    width: 350px;
+    font-size: 18px;
+}
+
+#container2 {
+    margin: 0 auto;
+    min-width: 0;
+    max-width: 500px;
+    width: 100%;
+}
+
+#imagecount {
+    display: inline-block;
+    margin-top: 3px;
+    width: 350px;
+    font-size: 18px;
+}
+
+.rc-button {
+    -webkit-appearance: button;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    display: inline-block;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    border: 1px solid transparent;
+    border-radius: 25px;
+    background-image: none;
+    color: #808080;
+    vertical-align: top;
+    text-align: center;
+    text-transform: none;
+    white-space: nowrap;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4285;
+    cursor: pointer;
+}
+
+.rc-button:hover, .rc-button:focus, .rc-button:active {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+    border-color: #adadad;
+    background-color: #ebebeb;
+    color: #ff6a00;
+    text-decoration: none;
+}
+
+#page {
+    position: absolute;
+    top: 60px;
+    left: 100%;
+    bottom: 0;
+    z-index: 50;
+    width: 100%;
+    background: #ffffff;
+}
+
+#pivotviewer {
+    color: #333;
+}
+
+#about {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 600px;
+    width: 300px;
+    background: #2D6CA2;
+    z-index: 60;
+    margin-top: -540px;
+}
+
+#about-banner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 60px;
+    width: 100%;
+    background: #ff6a00;
+}
+
+#about-banner-text {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+#buttonAbout {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+#about-body {
+    margin-top: 70px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+#about-body p {
+    margin-top: 0px;
+}
+
+a:link {
+    text-decoration: none;
+    color: #ff6a00;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:active {
+    text-decoration: underline;
+}
