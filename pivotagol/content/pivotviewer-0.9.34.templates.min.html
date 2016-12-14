@@ -1,0 +1,176 @@
+<script type="text/html" id="pv_template_loader">
+	<div class='pv-loading' style='top:{{top}}px;left:{{left}}px;'>
+		<img src='{{baseContentPath}}/images/loading.gif' alt='Loading' />
+	</div>
+</script>
+<script type="text/html" id="pv_template_toolbar">
+	<div class='pv-toolbarpanel'>
+		{{#brandImage}}<img id='brandimage' class='pv-toolbarpanel-brandimage' src='{{brandImage}}'></img>{{/brandImage}}
+		<span class='pv-toolbarpanel-name'>{{collectionName}}</span>
+		<span class='pv-toolbarpanel-count'>0</span>
+		<div class='pv-toolbarpanel-facetbreadcrumb'></div>
+		<!--<div class='pv-toolbarpanel-feedback' title='Feedback &amp; Support'>
+			<img alt='Feedback &amp; Support' src='{{baseContentPath}}/images/user_comment.png'/>
+		</div>-->
+		<div class='pv-toolbarpanel-zoomcontrols'>
+            <div class="pv-zoomslider-buttons"><img src='{{baseContentPath}}/images/minus.png' /></div>
+			<div class='pv-toolbarpanel-zoomslider noUiSlider'></div>
+            <div class="pv-zoomslider-buttons"><img src='{{baseContentPath}}/images/plus.png' /></div>
+		</div>
+		<div class='pv-toolbarpanel-viewcontrols'></div>
+		<div class='pv-toolbarpanel-sortcontrols'></div>
+	</div>
+</script>
+<script type="text/html" id="pv_template_mainpanel">
+    <div class='pv-mainpanel' style="width:{{width}}px; height:{{mainPanel.height}}px;">
+        <div class='pv-filterpanel-search-autocomplete'></div>
+        <div class='pv-filterpanel' style='height:{{filterPanel.height}}px;'>
+            <!--<div class='pv-filterpanel-export' id='pv-filterpanel-export-container' title='Export to clipboard'>
+                <img alt='Export to clipboard' src='{{baseContentPath}}/images/table_go.png' id='pv-filterpanel-export-img' />
+            </div>-->
+            <div class='pv-filterpanel-clearall' title="Clear all">
+                <span>Clear All</span>
+                <img alt='Clear all' src='{{baseContentPath}}/images/FilterPanelClear.png' />
+            </div>
+            <!--<input class='pv-filterpanel-search' type='text' placeholder='Search...' />-->
+            <input class='pv-filterpanel-keyword' type='text' placeholder='Keyword Filter...' />
+            <div class='pv-filterpanel-accordion-wrapper'>
+                <div class='pv-filterpanel-accordion'></div>
+            </div>
+        </div>
+        <div class='pv-viewpanel'>
+            <canvas class='pv-viewarea-canvas' width='{{width}}px' height='{{mainPanel.height}}px'></canvas>
+            <canvas class='pv-viewarea-canvas-zoom' width='{{width}}px' height='{{mainPanel.height}}px'></canvas>
+        </div>
+        <div class='pv-infopanel' style='height:{{infoPanel.height}}px;'>
+        </div>
+        <div class="pv-itemadorner"></div>
+        <div class="pv-itemselect"></div>
+    </div>
+</script>
+<script type="text/html" id="pv_template_viewpanel_view">
+    <div class='pv-viewpanel-view' id='pv-viewpanel-view-{{viewIndex}}'></div>
+</script>
+<script type="text/html" id="pv_template_toolbar_viewcontrols">
+    <div class='pv-toolbarpanel-view' id='pv-toolbarpanel-view-{{viewIndex}}' title='{{viewName}}'>
+        <img id='pv-viewpanel-view-{{viewIndex}}-image' src='{{buttonPath}}' alt='{{viewName}}' />
+    </div>
+</script>
+<script type="text/html" id="pv_template_filterpanel_facetheader">
+    {{#categories}}
+    <h3 id='pv-cat-heading-{{nameEscaped}}'>
+        <a href='#'>{{name}}</a>
+        <div class='pv-filterpanel-accordion-heading-clear' facetType='{{type}}' facetName='{{escapedItemFacetName}}' title="Clear"><img alt='Clear' src='{{baseContentPath}}/images/FilterPanelClear.png' /></div>
+    </h3>
+    <div id='pv-cat-{{nameEscaped}}'></div>
+    {{/categories}}
+</script>
+<script type="text/html" id="pv_template_facettype_string_sort">
+    {{^customSort}}
+    <span class='pv-filterpanel-accordion-facet-sort'>Sort: A-Z</span>
+    {{/customSort}}
+    {{#customSort}}
+    <span class='pv-filterpanel-accordion-facet-sort' customSort='{{Name}}'>Sort: {{Name}}</span>
+    {{/customSort}}
+</script>
+<script type="text/html" id="pv_template_facettype_string">
+    <ul class='pv-filterpanel-accordion-facet-list'>
+    {{#facets}}
+        <li class='pv-filterpanel-accordion-facet-list-item' id='{{itemId}}'>
+            <input itemvalue='{{escapedItemFacetValue}}' itemfacet='{{escapedItemFacetName}}' facetType='String' class='pv-facet-facetitem' type='checkbox' {{#checked}}checked="checked"{{/checked}}  />
+            <div class='pv-facet-facetitem-label' title='{{itemValue}}'>{{itemValue}}</div>
+            <span class='pv-facet-facetitem-count' style="background-image: url('{{baseContentPath}}/images/CountGradient.png');">{{count}}</span>
+        </li>
+    {{/facets}}
+    </ul>
+</script>
+<script type="text/html" id="pv_template_facettype_boolean">
+    <ul class='pv-filterpanel-accordion-facet-list'>
+    {{#facets}}
+        <li class='pv-filterpanel-accordion-facet-list-item' id='Li1'>
+            <input itemvalue='{{escapedItemFacetValue}}' itemfacet='{{escapedItemFacetName}}' facetType='Boolean' class='pv-facet-facetitem' type='checkbox' {{#checked}}checked="checked"{{/checked}}  />
+            <div class='pv-facet-facetitem-label' title='{{itemValue}}'>{{itemValue}}</div>
+            <span class='pv-facet-facetitem-count' style="background-image: url('{{baseContentPath}}/images/CountGradient.png');">{{count}}</span>
+        </li>
+    {{/facets}}
+    </ul>
+</script>
+<script type="text/html" id="pv_template_facettype_number">
+    <div class="pv-facet-facetitem-number" itemfacet='{{escapedItemFacetName}}'>
+        <div class='pv-filterpanel-numericslider-range-val'>&nbsp;</div>
+        <svg class='pv-filterpanel-accordion-facet-chart' width='{{width}}' height='{{height}}'>
+            {{#bars}}
+            <rect class='pv-filterpanel-accordion-facet-chart-bar' x='{{xPos}}' y='{{yPos}}' width='{{width}}' height='{{height}}' minValue='{{minValue}}' maxValue='{{maxValue}}'></rect>
+            {{/bars}}
+        </svg>
+        <div class="pv-filterpanel-numericslider noUiSlider" itemfacet='{{escapedItemFacetName}}'></div>
+        <span class="pv-filterpanel-numericslider-range-min">{{minValue}}</span>
+        <span class="pv-filterpanel-numericslider-range-max">{{maxValue}}</span>
+    </div>
+</script>
+<script type="text/html" id="pv_template_facettype_date_customrange">
+    <ul class='pv-filterpanel-accordion-facet-list'>
+        <li class='pv-filterpanel-accordion-facet-list-item' id='{{itemId}}'>
+            <input itemfacet='{{escapedFacetItemName}}' dateRangeStart='{{dateStart}}' dateRangeEnd='{{dateEnd}}' class='pv-facet-facetitem-date' type='checkbox' />
+            <div class='pv-facet-facetitem-label' title='Custom Range'>Custom Range</div>
+            <div class='pv-facet-facetitem-date-picker pv-facet-facetitem-date-picker-from'>
+                <span title='From'>From&nbsp;</span>
+                <span>{{dateStart}}</span>
+                <img alt='From Date' src='{{baseContentPath}}/images/CalendarPicker.png' />
+            </div>
+            <div class='pv-facet-facetitem-date-picker pv-facet-facetitem-date-picker-to'>
+                <span title='To'>To&nbsp;</span><span>{{dateEnd}}</span><img alt='To Date' src='{{baseContentPath}}/images/CalendarPicker.png' />
+            </div>
+        </li>
+    </ul>
+</script>
+<script type="text/html" id="pv_template_toolbar_sort">
+    <select class="pv-toolbarpanel-sort">
+        {{#categories}}
+        <option value='{{nameEscaped}}' label='{{name}}'>{{name}}</option>
+        {{/categories}}
+    </select>
+</script>
+<script type="text/html" id="pv_template_infopanel_details">
+    <div class='pv-infopanel-controls'>
+        <div>
+            <div class='pv-infopanel-controls-navleft' title="Go to previous item"><img alt='Go to previous item' src='{{baseContentPath}}/images/InfoPanelLeft.png' /></div>
+            <div class='pv-infopanel-controls-navbar'></div>
+            <div class='pv-infopanel-controls-navright' title="Go to next item"><img alt='Go to next item' src='{{baseContentPath}}/images/InfoPanelRight.png' /></div>
+        </div>
+    </div>
+    <div class='pv-infopanel-toolbar'></div>
+    <!--<div class='pv-infopanel-heading'>{{title}}</div>-->
+    <a class='pv-infopanel-heading' href='{{item.Href}}' target='_blank'>{{title}}</a>
+    <div class='pv-infopanel-details'>
+        {{#description}}
+            <div class='pv-infopanel-detail-description' style='height:100px;'>{{description}}</div>
+            <div class='pv-infopanel-detail-description-more'>More</div>
+        {{/description}}
+        {{#values}}
+        <div class='pv-infopanel-detail {{#alternate}}detail-dark{{/alternate}}{{^alternate}}detail-light{{/alternate}}'>
+            <div class='pv-infopanel-detail-item detail-item-title'>{{name}}</div>
+            {{#facetValues}}
+            <div class='pv-infopanel-detail-item detail-item-value {{#isFilterVisible}}detail-item-value-filter{{/isFilterVisible}}'>
+                {{#href}}
+                <a class='detail-item-link' href='{{href}}' target='_blank'>{{value}}</a>
+                {{/href}}
+                {{^href}}
+                {{value}}
+                {{/href}}
+            </div>
+            {{/facetValues}}
+        </div>
+        {{/values}}
+    </div>
+</script>
+<script type="text/html" id="pv_template_nocanvas">
+    <div class="pv-nocanvas">
+        <h2>PivotViewer is incompatiable with this browser or browser settings.</h2>
+        <span>Please try again using either IE9 and above, Firefox, Chrome or Safari.</span>
+        <br />
+        <span>If you are using IE9 please make sure that compatability mode is switched off.</span>
+        <br />
+        <img alt='Compatability mode' src='{{baseContentPath}}/images/CapatabilityMode.png'/>
+    </div>
+</script>

@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!--
+
+      Copyright 2016 Esri
+
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at:
+      http://www.apache.org/licenses/LICENSE-2.0
+
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+
+    -->
+
+    <title>Pivot AGOL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="content/pivotviewer-0.9.34.min.css" />
+    <link type="text/html" rel="template" href="content/pivotviewer-0.9.34.templates.min.html" id="pv-templates" />
+    <link type="text/css" rel="stylesheet" href="index.css">
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+    <script type="text/javascript" src="js/modernizr.custom.js"></script>
+    <script type="text/javascript" src="js/easing.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="js/mobiscroll-2.0.2.custom.min.js"></script>
+    <script type="text/javascript" src="js/mustache.min.js"></script>
+    <script type="text/javascript" src="js/ICanHaz-no-mustache.min.js"></script>
+    <script type="text/javascript" src="js/pubsub.min.js"></script>
+    <script type="text/javascript" src="js/jquery.nouislider.min.js"></script>
+    <script type="text/javascript" src="js/pivotviewer-0.9.34.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-5', 'esri.com');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id="pivotviewer" class="pv-box-sizing"></div>
+    <div class="modal fade bs-example-modal-sm" id="agolWindow" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="false" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close hide" data-dismiss="modal" aria-hidden="true" id="closeWindowButton">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Search ArcGIS Online</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label class="search-prompt-labels">Type</label>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default active">
+                                    <input type="radio" name="type" id="typeEverything"> Everything
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="type" id="typeMaps"> Maps Only
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="type" id="typeApps"> Apps Only
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="search-prompt-labels">With</label>
+                            <div class="btn-group">
+                                <input type="email" class="form-control pv-box-sizing" id="withAll" placeholder="all of these">
+                                <input type="email" class="form-control pv-box-sizing" id="withExact" placeholder="exact phrase">
+                                <input type="email" class="form-control pv-box-sizing" id="withWithout" placeholder="without">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="search-prompt-labels">Search</label>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default active">
+                                    <input type="radio" name="search" id="searchEverything"> Everything
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="search" id="searchDescription"> Description
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="search" id="searchSnippet"> Snippet
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="search" id="searchTag"> Tag
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="search-prompt-labels">Author</label>
+                            <div class="btn-group">
+                                <input type="email" class="form-control pv-box-sizing" id="author" placeholder="esri">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="search-prompt-labels">Uploaded</label>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default active">
+                                    <input type="radio" name="upload" id="uploadAny"> Anytime
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="upload" id="uploadToday"> Today
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="upload" id="uploadPastWeek"> Past Week
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="upload" id="uploadPastMonth"> Past Month
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="upload" id="uploadPastYear"> Past Year
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeButton">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="findButton">Find</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="aboutWindow" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close hide" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">About AGOL Pivot</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="scrollspy-example">
+                        <p>AGOL Pivot Viewer is a prototype developed by <a href="http://www.esri.com">Esri</a>'s <a href="http://blogs.esri.com/esri/apl">Applications Prototype Lab</a> in Redlands, California. The viewer uses the <a href="http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/The_ArcGIS_REST_API">ArcGIS Rest API</a> to search for AGOL content. Results are displayed in <a href="http://lobsterpot.com.au">LobsterPot</a>'s <a href="http://lobsterpot.com.au/pivotviewer">HTML5 pivotviewer</a>.</p>
+                        <a href="http://www.lobsterpot.com.au">
+                            <img src="./content/images/logo_home2.png" alt="LobsterPot" width="150" />
+                        </a>
+                        <p>The LobsterPot HTML5 PivotViewer is a cross browser, cross platform version of the Silverlight PivotViewer control produced by Microsoft. The control has been written as jQuery plug-in and utilises features available in HTML5. PivotViewer is a data visualisation tool for collections of data that quickly allows users to visualise data as a collection of Trading Cards or Tiles. PivotViewer has an intuitive interface that allows for data exploration through filtering, sorting and by changing views; enabling exploration from multiple perspectives to more easily identify relationships and outliers.</p>
+                        <a href="http://www.esri.com/software/arcgis/arcgisonline">
+                            <img src="./content/images/esri.png" alt="ArcGIS Online" />
+                        </a>
+                        <p>Create interactive maps and apps and share them with the rest of the organization. Each user gets an account so they can share and collaborate with each other. Users also get access to ready-to-use apps, maps, templates, and other content so they can be productive right away.</p>
+                        <a href="licence.txt">other libraries</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toolbar" class="rc-p" tabindex="-1">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="infoButton">About This App</button>
+        </div>
+    </div>
+</body>
+</html>
