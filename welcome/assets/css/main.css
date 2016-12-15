@@ -170,21 +170,25 @@ ul.contact li a:hover {
     color: white;
 }
 
-.item.thumb a.github {
+.item.thumb div.buttons {
     position: absolute;
     bottom: 2px;
-    left: 20px;
+    left: 5px;
     z-index: 2;
     color: white;
 }
 
-.item.thumb a.youtube {
+.item.thumb div.buttons a {
+    display: inline-block;
+}
+
+/*.item.thumb a.youtube {
     position: absolute;
     bottom: 2px;
     left: 40px;
     z-index: 2;
     color: white;
-}
+}*/
 
 /* Icons */
 
