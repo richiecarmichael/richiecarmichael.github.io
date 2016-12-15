@@ -1,6 +1,6 @@
 ﻿/* ------------------------------------------------------------
    Developed by the Applications Prototype Lab
-   (c) 2015 Esri | http://www.esri.com/legal/software-license  
+   (c) 2015 Esri | https://www.esri.com/legal/software-license  
 --------------------------------------------------------------- */
 
 require([
@@ -13,7 +13,7 @@ require([
     'esri/symbols/ObjectSymbol3DLayer',
     'esri/layers/ArcGISTiledLayer',
     'esri/layers/GraphicsLayer',
-    "esri/renderers/SimpleRenderer",
+    'esri/renderers/SimpleRenderer',
     'esri/views/SceneView',
     'dojo/domReady!'
 ],
@@ -91,9 +91,9 @@ function (
         };
 
         // Constants
-        var PROXY = 'http://maps.esri.com/rc/urban/proxy.ashx';
+        var PROXY = 'https://maps.esri.com/rc/urban/proxy.ashx';
         var WIKI = 'https://en.wikipedia.org/w/api.php';
-        var BASEMAP = 'http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer';
+        var BASEMAP = 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer';
         var DATE_MIN = 0;              // Chart's start date
         var DATE_MAX = 2000;           // Chart's end date
         var DATE_STA = 500;            // Chart's initial date
@@ -804,7 +804,7 @@ function (
                 .attr('transform', $.format('translate({0},{1})', [margin.left, margin.top]))
                 .call(xaxis);
 
-            svg.append("g")
+            svg.append('g')
                 .attr('transform', $.format('translate({0},{1})', [margin.left - 3, margin.top]))
                 .call(yaxis);
 
