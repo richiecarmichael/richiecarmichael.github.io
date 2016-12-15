@@ -1,4 +1,4 @@
-@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
+@import url("//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
 @import url("font-awesome.min.css");
 
 /*
@@ -160,6 +160,13 @@ ul.contact li a:hover {
 .item.thumb img {
     display: block;
     z-index: 1;
+}
+
+.item.thumb i {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    /*color: white;*/
 }
 
 /* Icons */
