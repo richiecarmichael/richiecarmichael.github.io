@@ -180,15 +180,8 @@ ul.contact li a:hover {
 
 .item.thumb div.buttons a {
     display: inline-block;
+    margin-right: 3px;
 }
-
-/*.item.thumb a.youtube {
-    position: absolute;
-    bottom: 2px;
-    left: 40px;
-    z-index: 2;
-    color: white;
-}*/
 
 /* Icons */
 
