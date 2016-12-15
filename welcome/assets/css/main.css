@@ -162,10 +162,26 @@ ul.contact li a:hover {
     z-index: 1;
 }
 
-.item.thumb a.github {
+.item.thumb a.bolt {
     position: absolute;
     bottom: 2px;
     left: 2px;
+    z-index: 2;
+    color: white;
+}
+
+.item.thumb a.github {
+    position: absolute;
+    bottom: 2px;
+    left: 17px;
+    z-index: 2;
+    color: white;
+}
+
+.item.thumb a.youtube {
+    position: absolute;
+    bottom: 2px;
+    left: 34px;
     z-index: 2;
     color: white;
 }
