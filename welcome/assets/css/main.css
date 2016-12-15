@@ -162,10 +162,10 @@ ul.contact li a:hover {
     z-index: 1;
 }
 
-.item.thumb .fa {
+.item.thumb a.github {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 2px;
+    left: 2px;
     z-index: 2;
     color: white;
 }
