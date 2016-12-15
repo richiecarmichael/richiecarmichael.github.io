@@ -1,7 +1,19 @@
-﻿/* -----------------------------------------------------------------------------------
-   Developed by the Applications Prototype Lab
-   (c) 2015 Esri | http://www.esri.com/legal/software-license  
------------------------------------------------------------------------------------ */
+﻿/* ------------------------------------------------------------
+
+   Copyright 2015 Esri
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at:
+   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+--------------------------------------------------------------- */
 
 require({
     packages: [{
@@ -57,8 +69,8 @@ function (
         var GEOSYNCHRONOUS_ORBIT = 35786;
 
         // Satellite database urls.
-        var NASA_SATELLITE_DATABASE = 'http://nssdc.gsfc.nasa.gov/nmc/masterCatalog.do?sc={0}'; // use International id
-        var N2YO_SATELLITE_DATABASE = 'http://www.n2yo.com/satellite/?s={0}';                   // use NORAD id
+        var NASA_SATELLITE_DATABASE = 'https://nssdc.gsfc.nasa.gov/nmc/masterCatalog.do?sc={0}'; // use International id
+        var N2YO_SATELLITE_DATABASE = 'https://www.n2yo.com/satellite/?s={0}';                   // use NORAD id
 
         // Rendering variables.
         var _satelliteRenderer = null;
