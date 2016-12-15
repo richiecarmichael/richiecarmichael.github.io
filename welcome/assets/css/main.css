@@ -162,7 +162,7 @@ ul.contact li a:hover {
     z-index: 1;
 }
 
-.item.thumb i {
+.item.thumb .fa {
     position: absolute;
     bottom: 0;
     left: 0;
