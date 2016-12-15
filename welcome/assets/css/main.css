@@ -165,7 +165,7 @@ ul.contact li a:hover {
 .item.thumb a.bolt {
     position: absolute;
     bottom: 2px;
-    left: 2px;
+    left: 5px;
     z-index: 2;
     color: white;
 }
@@ -173,7 +173,7 @@ ul.contact li a:hover {
 .item.thumb a.github {
     position: absolute;
     bottom: 2px;
-    left: 17px;
+    left: 20px;
     z-index: 2;
     color: white;
 }
@@ -181,7 +181,7 @@ ul.contact li a:hover {
 .item.thumb a.youtube {
     position: absolute;
     bottom: 2px;
-    left: 34px;
+    left: 40px;
     z-index: 2;
     color: white;
 }
