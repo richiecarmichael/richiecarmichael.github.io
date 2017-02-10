@@ -7,6 +7,10 @@
 require([
     'esri/map',
     'esri/layers/ArcGISImageServiceLayer',
+    'esri/layers/ImageServiceParameters',
+    'esri/layers/RasterFunction',
+    'esri/layers/MosaicRule',
+    'esri/TimeExtent',
     'esri/geometry/Extent',
     'esri/geometry/ScreenPoint',
     'esri/dijit/Search',
@@ -15,6 +19,10 @@ require([
 function (
     Map,
     ArcGISImageServiceLayer,
+    ImageServiceParameters,
+    RasterFunction,
+    MosaicRule,
+    TimeExtent,
     Extent,
     ScreenPoint,
     Search
@@ -25,86 +33,30 @@ function (
         // Constants
         var SVGNS = 'http://www.w3.org/2000/svg';
         var SIZE = 250;
-        var RANDOMNESS = 300;
-        var PREVIEW = 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/Agriculture/ImageServer';
+        var RANDOMNESS = 300;        
+        var PREVIEW = 'https://landsat2.arcgis.com/arcgis/rest/services/LandsatGLS/MS/ImageServer';
+        var LENS    = 'https://landsat2.arcgis.com/arcgis/rest/services/Landsat/PS/ImageServer';
 
         // Six landsat image services hosted by Esri. A button will be addded to the screen for each service.
         var IMAGES = [
-            {
-                id: 1975,
-                name: '1975',
-                url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS1975_Enhanced/ImageServer',
-                color: 'red'
-            },
-            {
-                id: 1990,
-                name: '1990',
-                url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS1990_Enhanced/ImageServer',
-                color: 'gold'
-            },
-            {
-                id: 2000,
-                name: '2000',
-                url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS2000_Enhanced/ImageServer',
-                color: 'green'
-            },
-            {
-                id: 2005,
-                name: '2005',
-                url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS2005_Enhanced/ImageServer',
-                color: 'gray'
-            },
-            {
-                id: 2010,
-                name: '2010',
-                url: 'http://imagery.arcgisonline.com/arcgis/rest/services/LandsatGLS/GLS2010_Enhanced/ImageServer',
-                color: 'purple'
-            }
+            { year: 2000, color: 'green' },
+            { year: 2005, color: 'black' },
+            { year: 2010, color: 'red' },
+            { year: 2015, color: 'blue' }
         ];
 
         // Below is a list of present area's of interest. This list was inspired by:
         // http://earthobservatory.nasa.gov/Features/WorldOfChange/
         var BOOKMARKS = [
-            {
-                name: 'Columbia Glacier ',
-                box: [-16450158, 8557590, -16297284, 8710464]
-            },
-            {
-                name: 'Palm Jebel Ali',
-                box: [6108081, 2864714, 6137013, 2888257]
-            },
-            {
-                name: 'Las Vegas',
-                box: [-12845948, 4302382, -12788085, 4347098]
-            },
-            {
-                name: 'Water Level in Lake Powell',
-                box: [-12443536, 4405304, -12327810, 4499474]
-            },
-            {
-                name: 'Mount Saint Helens',
-                box: [-13608687, 5807163, -13594222, 5818342]
-            },
-            {
-                name: 'Growing Deltas in Atchafalaya Bay',
-                box: [-10200228, 3412905, -10142366, 3459990]
-            },
-            {
-                name: 'Columbia Glacier, Alaska',
-                box: [-16428273, 8609915, -16312547, 8704086]
-            },
-            {
-                name: 'Cape Cod',
-                box: [-7796340, 5100238, -7781875, 5112009]
-            },
-            {
-                name: 'Shrinking Aral Sea',
-                box: [6391083, 5442255, 6853985, 5818936]
-            },
-            {
-                name: 'Yellow River Delta',
-                box: [13231089, 4522106, 13288952, 4569192]
-            }
+            { name: 'Palm Jebel Ali',     box: [6108081, 2864714, 6137013, 2888257] },
+            { name: 'Las Vegas',          box: [-12845948, 4302382, -12788085, 4347098] },
+            { name: 'Lake Powell',        box: [-12443536, 4405304, -12327810, 4499474] },
+            { name: 'Mount Saint Helens', box: [-13608687, 5807163, -13594222, 5818342] },
+            { name: 'Atchafalaya Bay',    box: [-10200228, 3412905, -10142366, 3459990] },
+            { name: 'Columbia Glacier',   box: [-16428273, 8609915, -16312547, 8704086] },
+            { name: 'Cape Cod',           box: [-7796340, 5100238, -7781875, 5112009] },
+            { name: 'Shrinking Aral Sea', box: [6391083, 5442255, 6853985, 5818936] },
+            { name: 'Yellow River Delta', box: [13231089, 4522106, 13288952, 4569192] }
         ];
 
         // Disable pan and zoom inertia
@@ -127,9 +79,10 @@ function (
             })
         });
         
-        var s = new Search({map: _map}, 'search');
-	    s.startup();
+        var s = new Search({ map: _map }, 'search');
+        s.startup();
 
+        // Create preview layer
         var preview = new ArcGISImageServiceLayer(PREVIEW);
 
         // Add bookmark images
@@ -161,7 +114,7 @@ function (
                         }, {
                             step: function (e) {
                                 $(this).css({
-                                    'transform': 'scale(' + e +')',
+                                    'transform': 'scale(' + e +')'
                                 });
                             },
                             duration: 200
@@ -176,7 +129,7 @@ function (
                         }, {
                             step: function (e) {
                                 $(this).css({
-                                    'transform': 'scale(' + e + ')',
+                                    'transform': 'scale(' + e + ')'
                                 });
                             },
                             duration: 200
@@ -226,19 +179,21 @@ function (
             $('#panel').append(
                 $(document.createElement('div'))
                     .addClass('rc-button')
-                    .attr('data-id', this.id)
+                    .attr('data-id', this.year)
                     .click(function () {
                         // When a button is clicked add a new lens window or hide/show existing lens.
-                        var lens = $('.rc-lens[data-id="' + that.id + '"]');
+                        var lens = $('.rc-lens[data-id="' + that.year + '"]');
                         if ($(this).hasClass('rc-checked')) {
                             $(this).removeClass('rc-checked');
-                            //lens.hide();
-                            lens.css('visibility', 'hidden');
+                            lens.css({
+                                'visibility': 'hidden'
+                            });
                         } else {
                             $(this).addClass('rc-checked');
                             if (lens.length) {
-                                //lens.show();
-                                lens.css('visibility', 'visible');
+                                lens.css({
+                                    'visibility': 'visible'
+                                });
                             } else {
                                 createLens(_map, that);
                             }
@@ -246,14 +201,14 @@ function (
                     })
                     .mouseenter(function () {
                         // When mouse enters button, highlight corresponding lens window (if any)
-                        $('.rc-lens[data-id="' + that.id + '"]').bringToFont();
-                        $('.rc-lens[data-id="' + that.id + '"] > .rc-frame').css({
+                        $('.rc-lens[data-id="' + that.year + '"]').bringToFont();
+                        $('.rc-lens[data-id="' + that.year + '"] > .rc-frame').css({
                             'border-style': 'solid'
                         });
                     })
                     .mouseleave(function () {
                         // Remove lens window highlighting when the mouse departs from button.
-                        $('.rc-lens[data-id="' + that.id + '"] > .rc-frame').css({
+                        $('.rc-lens[data-id="' + that.year + '"] > .rc-frame').css({
                             'border-style': 'none'
                         });
                     })
@@ -269,15 +224,14 @@ function (
                                         height: 25
                                     })
                                     .append(
-                                        $(document.createElementNS(SVGNS, 'polygon'))
-                                            .attr({
-                                                points: '0,0 25,0 0,25',
-                                                fill: this.color
-                                            })
+                                        $(document.createElementNS(SVGNS, 'polygon')).attr({
+                                            points: '0,0 25,0 0,25',
+                                            fill: this.color
+                                        })
                                     ),
                                     $(document.createElement('div'))
                                         .addClass('rc-button-text')
-                                        .html(this.name)
+                                        .html(this.year)
                             )
                     )
             );
@@ -290,12 +244,36 @@ function (
             }));
             $(this).zIndex(++max);
             return this;
-        }
+        };
 
         // This function create and manages the lens window 
         function createLens(map, image) {
-            // Initialize image service layer
-            var ail = new ArcGISImageServiceLayer(image.url);
+            // Create mosaic rule to order imagery.
+            var mr = new MosaicRule();
+            mr.ascending = true;
+            mr.method = MosaicRule.METHOD_ATTRIBUTE;
+            mr.sortField = 'AcquisitionDate';
+            mr.sortValue = '2017/02/06, 12:00 AM';
+            mr.operation = MosaicRule.OPERATION_FIRST;
+
+            // Raster function
+            var rf = new RasterFunction();
+            rf.functionName = 'Pansharpened Natural Color';
+
+            // Image properties
+            var isp = new ImageServiceParameters();
+            isp.mosaicRule = mr;
+            isp.renderingRule = rf;
+            isp.timeExtent = new TimeExtent(
+                new Date(Date.UTC(image.year-2, 0, 1)),
+                new Date(Date.UTC(image.year+2, 0, 1))
+            );
+
+            // Initialize image service layer.
+            var ail = new ArcGISImageServiceLayer(LENS, {
+                imageServiceParameters: isp,
+                useMapTime: false
+            });
 
             // Calculate initial location
             var x = map.width / 2 - SIZE / 2 + (Math.random() - 0.5) * RANDOMNESS;
@@ -318,7 +296,7 @@ function (
             // Add a new draggable/resizeable window to the same div hosting the Esri map
             $('#' + map.id).parent().append(
                 $(document.createElement('div'))
-                    .attr('data-id', image.id)
+                    .attr('data-id', image.year)
                     .addClass('ui-widget-content ui-resizable rc-lens')
                     .uniqueId()
                     .css({
@@ -396,27 +374,28 @@ function (
             );
 
             // Force new lens to top
-            $('.rc-lens[data-id="' + image.id + '"]').bringToFont();
+            $('.rc-lens[data-id="' + image.year + '"]').bringToFont();
 
             // Immediately refresh content for the new lens
             refresh();
 
             // Hide is called at the start of drag and panning operations. Hide the current map image.
             function hide() {
-                $('.rc-lens[data-id="' + image.id + '"]').css({
+                $('.rc-lens[data-id="' + image.year + '"]').css({
                     'background-image': 'none'
                 });
             }
 
             // Request a new map image for the lens
             function refresh() {
-                var l = $('.rc-lens[data-id="' + image.id + '"]');
+                var l = $('.rc-lens[data-id="' + image.year + '"]');
                 var p = l.position();
                 var w = l.width();
                 var h = l.height();
                 var ll = map.toMap(new ScreenPoint(p.left, p.top + h));
                 var ur = map.toMap(new ScreenPoint(p.left + w, p.top));
                 var ex = new Extent(ll.x, ll.y, ur.x, ur.y, map.spatialReference);
+
                 ail.getImageUrl(ex, w, h, function (e) {
                     l.css({
                         'background-image': 'url(' + e + ')',
