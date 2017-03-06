@@ -354,10 +354,8 @@ function (
                 ]);
 
             // Define axises
-            var xaxis = d3.axisBottom(x)
-                .tickFormat(d3.format('g'));
-            var yaxis = d3.axisLeft(y)
-                .tickValues([0, 200, 400, 600, 800]);
+            var xaxis = d3.axisBottom(x).tickFormat(d3.format('d'));
+            var yaxis = d3.axisLeft(y).tickValues([0, 200, 400, 600, 800]);
 
             // Draw x-axis
             svg.append('g')
