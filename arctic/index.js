@@ -22,7 +22,6 @@ require([
     'esri/layers/ArcGISImageServiceLayer',
     'esri/layers/RasterFunction',
     'esri/layers/ImageServiceParameters',
-    'esri/layers/FeatureLayer',
     'esri/layers/GraphicsLayer',
     'esri/symbols/SimpleFillSymbol',
     'esri/symbols/SimpleLineSymbol',
@@ -40,7 +39,6 @@ function (
     ArcGISImageServiceLayer,
     RasterFunction,
     ImageServiceParameters,
-    FeatureLayer,
     GraphicsLayer,
     SimpleFillSymbol,
     SimpleLineSymbol,
@@ -56,7 +54,6 @@ function (
         // Hardcoded constants
         var BASE = 'https://services.arcgisonline.com/arcgis/rest/services/Polar/Arctic_Ocean_Base/MapServer';
         var ARCTIC = 'https://maps.esri.com/apl1/rest/services/Arctic_DEM_APS/ImageServer';
-        var FXN = 'DynamicShadedRelief';
         var EXTENT = new Extent(586268, -1851963, 3655360, -25433, new SpatialReference(5936));
 
         // Hidden flag to switch from single to multidirectional hillshade
@@ -199,27 +196,39 @@ function (
             });
         });
 
+        // Updating sun position with client-side raster function.
         function setSunRenderingRule() {
             if (_isMultiDirectional) {
+                $('#slider-sun-azimuth').slider('disable');
+                $('#slider-sun-altitude').slider('disable');
+
                 _sun.setRenderingRule(new RasterFunction({
                     rasterFunction: 'MultiDirectionalShadedRelief'
                 }));
-                $('#slider-sun-azimuth').slider('disable');
-                $('#slider-sun-altitude').slider('disable');
             }
             else {
-                _sun.setRenderingRule(new RasterFunction({
-                    rasterFunction: FXN,
-                    functionArguments: {
-                        Altitude: $('#slider-sun-altitude').slider('getValue'),
-                        Azimuth: $('#slider-sun-azimuth').slider('getValue')
-                    }
-                }));
                 $('#slider-sun-azimuth').slider('enable');
                 $('#slider-sun-altitude').slider('enable');
+
+                var mask = new RasterFunction();
+                mask.functionName = 'Mask';
+                mask.functionArguments = {
+                    NoDataValues: ['0']
+                };
+
+                var hillshade = new RasterFunction();
+                hillshade.functionName = 'Hillshade';
+                hillshade.functionArguments = {
+                    DEM: mask,
+                    Azimuth: $('#slider-sun-azimuth').slider('getValue'),
+                    Altitude: $('#slider-sun-altitude').slider('getValue')
+                };
+
+                _sun.setRenderingRule(hillshade);
             }
         }
 
+        // Filtering elevation pixels with client-side raster function.
         function setElevationRenderingRule() {
             var e_min = $('#slider-elevation').slider('getAttribute', 'min');
             var e_max = $('#slider-elevation').slider('getAttribute', 'max');
@@ -246,25 +255,133 @@ function (
                 _ele.show();
             }
 
-            _ele.setRenderingRule(new RasterFunction({
-                rasterFunction: 'Filter_ElevationSlopeAspect',
-                functionArguments: {
-                    'NoDataRanges_Elevation': [
-                        e_min,
-                        e_lef,
-                        e_rig,
-                        e_max
-                    ],
-                    'InputRanges_Aspect': [
-                        a_lef,
-                        a_rig
-                    ],
-                    'InputRanges_Slope': [
-                        s_lef,
-                        s_rig
-                    ]
-                }
-            }));
+            var remap = new RasterFunction();
+            remap.functionName = 'Remap';
+            remap.functionArguments = {
+                NoDataRanges: [e_min, e_lef, e_rig, e_max],
+                AllowUnmatched: true
+            };
+
+            var aspect = new RasterFunction();
+            aspect.functionName = 'Aspect';
+            aspect.functionArguments = {
+                Raster: remap
+            };
+
+            var remap2 = new RasterFunction();
+            remap2.functionName = 'Remap';
+            remap2.functionArguments = {
+                Raster: aspect,
+                InputRanges: [a_lef, a_rig],
+                OutputValues: [1],
+                AllowUnmatched: false
+            };
+            remap2.outputPixelType = 'U8';
+
+            var slope = new RasterFunction();
+            slope.functionName = 'Slope';
+            slope.functionArguments = {
+                DEM: remap,
+                ZFactor: 1
+            };
+
+            var remap3 = new RasterFunction();
+            remap3.functionName = 'Remap';
+            remap3.functionArguments = {
+                Raster: slope,
+                InputRanges: [s_lef, s_rig],
+                OutputValues: [1],
+                AllowUnmatched: false
+            };
+
+            var arithmetic = new RasterFunction();
+            arithmetic.functionName = 'Arithmetic';
+            arithmetic.functionArguments = {
+                Raster: remap2,
+                Raster2: remap3,
+                Operation: 1
+            };
+            arithmetic.outputPixelType = 'U8';
+
+            var colormap = new RasterFunction();
+            colormap.functionName = 'Colormap';
+            colormap.functionArguments = {
+                Raster: arithmetic,
+                Colormap: [[2, 0, 255, 255]]
+            };
+            colormap.outputPixelType = 'U8';
+
+            _ele.setRenderingRule(colormap);
         }
+
+        //// Updating sun position with custom raster function.
+        //function setSunRenderingRule() {
+        //    if (_isMultiDirectional) {
+        //        _sun.setRenderingRule(new RasterFunction({
+        //            rasterFunction: 'MultiDirectionalShadedRelief'
+        //        }));
+        //        $('#slider-sun-azimuth').slider('disable');
+        //        $('#slider-sun-altitude').slider('disable');
+        //    }
+        //    else {
+        //        _sun.setRenderingRule(new RasterFunction({
+        //            rasterFunction: 'DynamicShadedRelief',
+        //            functionArguments: {
+        //                Altitude: $('#slider-sun-altitude').slider('getValue'),
+        //                Azimuth: $('#slider-sun-azimuth').slider('getValue')
+        //            }
+        //        }));
+        //        $('#slider-sun-azimuth').slider('enable');
+        //        $('#slider-sun-altitude').slider('enable');
+        //    }
+        //}
+
+        //// Filtering elevation pixels with a custom raster function.
+        //function setElevationRenderingRule() {
+        //    var e_min = $('#slider-elevation').slider('getAttribute', 'min');
+        //    var e_max = $('#slider-elevation').slider('getAttribute', 'max');
+        //    var e_lef = $('#slider-elevation').slider('getValue')[0];
+        //    var e_rig = $('#slider-elevation').slider('getValue')[1];
+
+        //    var a_min = $('#slider-aspect').slider('getAttribute', 'min');
+        //    var a_max = $('#slider-aspect').slider('getAttribute', 'max');
+        //    var a_lef = $('#slider-aspect').slider('getValue')[0];
+        //    var a_rig = $('#slider-aspect').slider('getValue')[1];
+
+        //    var s_min = $('#slider-slope').slider('getAttribute', 'min');
+        //    var s_max = $('#slider-slope').slider('getAttribute', 'max');
+        //    var s_lef = $('#slider-slope').slider('getValue')[0];
+        //    var s_rig = $('#slider-slope').slider('getValue')[1];
+
+        //    if (e_min === e_lef && e_max === e_rig &&
+        //        a_min === a_lef && a_max === a_rig &&
+        //        s_min === s_lef && s_max === s_rig) {
+        //        _ele.hide();
+        //        return;
+        //    }
+        //    else {
+        //        _ele.show();
+        //    }
+
+        //    _ele.setRenderingRule(new RasterFunction({
+        //        rasterFunction: 'Filter_ElevationSlopeAspect',
+        //        functionArguments: {
+        //            'NoDataRanges_Elevation': [
+        //                e_min,
+        //                e_lef,
+        //                e_rig,
+        //                e_max
+        //            ],
+        //            'InputRanges_Aspect': [
+        //                a_lef,
+        //                a_rig
+        //            ],
+        //            'InputRanges_Slope': [
+        //                s_lef,
+        //                s_rig
+        //            ]
+        //        }
+        //    }));
+        //}
     });
 });
