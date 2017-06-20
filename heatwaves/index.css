@@ -1,0 +1,291 @@
+/* ------------------------------------------------------------
+
+   Copyright 2016 Esri
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at:
+   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+--------------------------------------------------------------- */
+
+html, body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    /*
+        Avenir LT W01 35 Light
+        Avenir LT W01 65 Medium
+        Avenir LT W01 85 Heavy
+        Avenir LT W01 45 Book
+        Avenir LT W01 55 Roman
+        AvenirLTW01-55Oblique
+        Avenir Next W01 Thin
+        AvenirNextLTW01-Heavy
+    */
+    font-family: 'Avenir LT W01 35 Light', Arial, Helvetica, sans-serif;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+.navbar-brand {
+    padding: 5px 5px 5px 5px;
+}
+
+.modal-content, .progress {
+    border-radius: 0;
+}
+
+#map-container {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#chart1, #chart2 {
+    height: 300px;
+}
+
+#modalChart .progress {
+    position: relative;
+    top: 50%;
+    width: 50%;
+    left: 25%;
+}
+
+#bottomNav {
+    display: none;
+    min-height: 60px;
+}
+
+@media (min-width: 768px) {
+    #bottomNav {
+        display: block;
+    }
+
+    #map-container {
+        bottom: 60px;
+    }
+}
+
+#timeSliderHost {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+}
+
+#timeSlider {
+    margin-top: 10px;
+}
+
+#title {
+    color: #777;
+    font-size: 22px;
+    font-weight: 700;
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 10px;
+}
+
+#legend {
+    position: absolute;
+    left: 21px;
+    bottom: 21px;
+    height: 100px;
+    width: 100px;
+    pointer-events: none;
+}
+
+#home {
+    position: absolute;
+    left: 21px;
+    top: 100px;
+}
+
+#ramp {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    width: 30px;
+    background: linear-gradient( to top, rgb(252, 251, 169), rgb(255, 247, 61), rgb(254, 231, 2), rgb(253, 182, 3), rgb(247, 116, 6), rgb(253, 41, 9), rgb(219, 39, 22), rgb(189, 34, 40), rgb(146, 22, 16), rgb(121, 0, 2), rgb(35, 19, 30) );
+}
+
+#min {
+    position: absolute;
+    left: 40px;
+    bottom: 0;
+}
+
+#max {
+    position: absolute;
+    left: 40px;
+    top: 0;
+}
+
+#map .esriSimpleSlider,
+#map .esriSimpleSliderIncrementButton,
+#map .esriSimpleSliderDecrementButton {
+    border-radius: 0 0 0 0;
+}
+
+.rc-item {
+    display: inline-block;
+}
+
+.rc-itemTitle {
+    font-size: 12px;
+}
+
+.rc-itemValue {
+    font-size: 20px;
+}
+
+#navbar .dropdown-toggle {
+    padding-top: 5px;
+    padding-bottom: 0;
+}
+
+#buttonHelp, #buttonAbout {
+    font-size: 18px;
+}
+
+#carousel-captions {
+    height: 100px;
+}
+
+#historic-heatwave-image {
+    width: 300px;
+    margin-left: 125px;
+}
+
+#historic-heatwave-caption {
+    margin-top:10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-style: italic;
+    font-size: 10px;
+}
+
+.rc-caption-item.active {
+    display: block;
+    padding-top: 5px;
+}
+
+.rc-caption-item:not(.active) {
+    display: none;
+}
+
+.tick line {
+    fill: none;
+    stroke: #00c8c8;
+    stroke-width: 1px;
+}
+
+.tick text {
+    fill:  #00c8c8;
+    stroke: none;
+}
+
+.domain {
+    fill: none;
+    stroke:  #00c8c8;
+    stroke-width: 1px;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.rc-lines path {
+    fill: none;
+    stroke: #00c8c8;
+    stroke-width: 2px;
+}
+
+.rc-year line {
+    fill: none;
+    stroke: red;
+    stroke-width: 1px;
+}
+
+.rc-year text {
+    fill: red;
+    stroke: none;
+}
+
+.rc-days line {
+    fill: none;
+    stroke: red;
+    stroke-width: 1px;
+    stroke-dasharray: 5; 
+}
+
+.rc-days text {
+    fill: red;
+    stroke: none;
+}
+
+.rc-axis text {
+    fill: #00c8c8;
+    stroke: none;
+}
+
+.rc-dots circle {
+    fill: #fff;
+    stroke:  #00c8c8;
+    stroke-width: 2px;
+}
+
+.rc-not-deadly circle {
+    fill: #fff;
+    stroke: #00c8c8;
+    stroke-width: 2px;
+}
+
+.rc-deadly circle {
+    fill: red;
+    stroke: white;
+    stroke-width: 2px;
+}
+
+.rc-threshold path {
+    fill: none;
+    stroke: red;
+    stroke-width: 1px;
+}
+
+.rc-threshold text {
+    fill: red;
+    stroke: none;
+}
+
+.carousel-control .icon-prev:before {
+    content: '\25C4';
+}
+
+.carousel-control .icon-next:before {
+    content: '\25BA';
+}
