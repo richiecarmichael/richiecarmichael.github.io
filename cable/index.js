@@ -1,6 +1,6 @@
 ﻿/* ------------------------------------------------------------
    Developed by the Applications Prototype Lab
-   (c) 2016 Esri | http://www.esri.com/legal/software-license  
+   (c) 2016 Esri | https://www.esri.com/legal/software-license  
 --------------------------------------------------------------- */
 
 require([
@@ -105,9 +105,9 @@ function (
             return $.format('{0}° {1}\' {2}" {3}', [deg, $.zeroPad(min, 2), $.zeroPad(sec, 2), dir]);
         };
 
-        var CABLES = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/2';
-        var CITIES = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/1';
-        var LINKS  = 'http://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/3';
+        var CABLES = 'https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/2';
+        var CITIES = 'https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/1';
+        var LINKS  = 'https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/SubmarineCables/FeatureServer/3';
 
         var OFFSET = 30000;
         var PIPE_SIZE = 25000;
