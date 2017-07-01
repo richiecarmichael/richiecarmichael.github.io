@@ -278,7 +278,7 @@ function (
         $('.modal a').attr('target', '_blank');
 
         // Update the caption text whenever teh carousel advances.
-        $('#carousel').on('slid.bs.carousel', function () {
+        $('#carousel').on('slide.bs.carousel', function () {
             var index = $('#carousel .item.active').index();
             var len = $('#carousel .item').length;
             var next = index === len - 1 ? 0 : index + 1;
@@ -288,7 +288,7 @@ function (
 
         // Determine margins
         var margin = {
-            left: 60,
+            left: 75,
             top: 20,
             right: 50,
             bottom: 45
@@ -401,17 +401,23 @@ function (
                     .call(yaxis);
 
                 // Add y-axis title
-                svg.append('g')
+                var yaxisLabel = svg.append('g')
                     .attr('transform', $.format('translate({0},{1}) rotate(-90)', [
-                        20,
+                        15,
                         margin.top + (height - margin.top - margin.bottom) / 2
                     ]))
                     .classed({
                         'rc-axis': true
-                    })
+                    });
+                yaxisLabel
                     .append('text')
                     .style('text-anchor', 'middle')
                     .text('Yearly number of deadly days');
+                yaxisLabel
+                    .append('text')
+                    .attr('dy', 15)
+                    .style('text-anchor', 'middle')
+                    .text('(average of 20 Earth system models)');
 
                 // Show "no data found" if necessary.
                 if (results.value === 'NoData') {
@@ -654,17 +660,23 @@ function (
                         .call(yaxis);
 
                     // Add y-axis title
-                    svg.append('g')
+                    var yaxisLabel = svg.append('g')
                         .attr('transform', $.format('translate({0},{1}) rotate(-90)', [
-                            20,
+                            15,
                             margin.top + (height - margin.top - margin.bottom) / 2
                         ]))
                         .classed({
                             'rc-axis': true
-                        })
+                        });
+                    yaxisLabel
                         .append('text')
                         .style('text-anchor', 'middle')
                         .text('Humidity of each day in ' + year);
+                    yaxisLabel
+                        .append('text')
+                        .attr('dy', 15)
+                        .style('text-anchor', 'middle')
+                        .text('(CSIRO model values)');
 
                     // Deadly threshold [humidity (y), temperature (x)]
                     var THRESHOLD = [
@@ -787,7 +799,7 @@ function (
                         })
                         .append('text')
                         .style('text-anchor', 'middle')
-                        .text('Deadly Threshold');
+                        .text('Deadly Threshold'); // (' + inside.length + '/' + data.length + ')');
                 });
             });
         }
