@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <!--
+
+      Copyright 2016 Esri
+
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at:
+      https://www.apache.org/licenses/LICENSE-2.0
+
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+
+    -->
+    <title>Deadly Heatwaves</title>
+    <meta http-equiv='content-type' content='text/html;charset=utf-8' />
+    <meta name='author' content='Esri' />
+    <meta name='keywords' content='heatwave' />
+    <meta name='description' content='Mapping historic and predicted global heatwaves.' />
+    <meta name='robots' content='index,follow' />
+
+    <meta name='twitter:card' value='summary' />
+    <meta name='twitter:title' content='Heatwaves' />
+    <meta name='twitter:site' content='@kiwirichie' />
+    <meta name='twitter:creator' content='@kiwirichie' />
+    <meta name='twitter:description' content='Mapping historic and predicted global heatwaves.' />
+
+    <meta property='og:locale' content='en_us' />
+    <meta property='og:title' content='Heatwaves' />
+    <meta property='og:description' content='Mapping historic and predicted global heatwaves.' />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='//maps.esri.com/globalriskofdeadlyheat/index.html' />
+    <meta property='og:image' content='//maps.esri.com/globalriskofdeadlyheat/img/uoh.png' />
+
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='apple-touch-fullscreen' content='yes' />
+    <link rel='apple-touch-icon' href='/img/uoh.png' />
+    <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link type='image/ico' rel='shortcut icon' href='img/favicon.ico' />
+    <link type='image/ico' rel='icon' href='img/favicon.ico' />
+
+    <link type='text/css' rel='stylesheet' href='//fast.fonts.com/cssapi/23855eec-5fdf-4594-9898-0113a04bfef0.css' />
+    <link type='text/css' rel='stylesheet' href='css/bootstrap.min.css' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/3.16/esri/css/esri.css' />
+    <link type='text/css' rel='stylesheet' href='//js.arcgis.com/3.16/dijit/themes/nihilo/nihilo.css' />
+    <link type='text/css' rel='stylesheet' href='index.css' />
+
+    <script type='text/javascript' src='js/jquery-2.2.3.min.js'></script>
+    <script type='text/javascript' src='js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='js/d3.min.js'></script>
+    <script type='text/javascript' src='//js.arcgis.com/3.16/'></script>
+    <script type='text/javascript' src='index.js'></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-10866840-29', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body>
+    <div id='map-container'>
+        <div id='map'></div>
+        <div id='legend'>
+            <div id='ramp'></div>
+            <div id='min'>Low</div>
+            <div id='max'>High</div>
+        </div>
+        <div id='home'></div>
+    </div>
+    <nav class='navbar navbar-default navbar-fixed-top'>
+        <div class='container-fluid'>
+            <div class='navbar-header'>
+                <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#navbar' aria-expanded='false'>
+                    <span class='sr-only'>Toggle navigation</span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='https://manoa.hawaii.edu' target='_blank'>
+                    <img alt='Brand' src='img/uoh.png' height='40' />
+                </a>
+                <div id='title'>Heatwaves: Number of deadly heat days</div>
+            </div>
+            <div class='collapse navbar-collapse' id='navbar'>
+                <ul class='nav navbar-nav navbar-right'>
+                    <li class='dropdown'>
+                        <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+                            <div class='rc-item'>
+                                <div class='rc-itemTitle'>Experiment</div>
+                                <div class='rc-itemValue'></div>
+                            </div>
+                            <span class='caret'></span>
+                        </a>
+                        <ul class='dropdown-menu rc-model'>
+                            <li class='active'>
+                                <a data-value='rcp26' href='#'>RCP2.6</a>
+                            </li>
+                            <li>
+                                <a data-value='rcp45' href='#'>RCP4.5</a>
+                            </li>
+                            <li>
+                                <a data-value='rcp85' href='#'>RCP8.5</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class='dropdown'>
+                        <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+                            <div class='rc-item'>
+                                <div class='rc-itemTitle'>Year</div>
+                                <div class='rc-itemValue'></div>
+                            </div>
+                            <span class='caret'></span>
+                        </a>
+                        <ul class='dropdown-menu rc-year'>
+                            <li>
+                                <a href='#'>1950</a>
+                            </li>
+                            <li>
+                                <a href='#'>1960</a>
+                            </li>
+                            <li>
+                                <a href='#'>1970</a>
+                            </li>
+                            <li>
+                                <a href='#'>1980</a>
+                            </li>
+                            <li>
+                                <a href='#'>1990</a>
+                            </li>
+                            <li>
+                                <a href='#'>2000</a>
+                            </li>
+                            <li>
+                                <a href='#'>2010</a>
+                            </li>
+                            <li role='separator' class='divider'></li>
+                            <li>
+                                <a href='#'>2020</a>
+                            </li>
+                            <li>
+                                <a href='#'>2050</a>
+                            </li>
+                            <li>
+                                <a href='#'>2075</a>
+                            </li>
+                            <li>
+                                <a href='#'>2100</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a id='buttonHelp' href='#'>Help</a></li>
+                    <li><a id='buttonAbout' href='#'>About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <nav id='bottomNav' class='navbar navbar-default navbar-fixed-bottom'>
+        <div class='container-fluid'>
+            <div id='timeSliderHost' class='nihilo'>
+                <div id='timeSlider'></div>
+            </div>
+        </div>
+    </nav>
+    <div id='modalHelp' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='label1'>
+        <div class='modal-dialog' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title' id='label1'>How to use this App</h4>
+                </div>
+                <div class='modal-body'>
+                    <div id='carousel' class='carousel slide' data-ride='carousel'>
+                        <div class='carousel-inner' role='listbox'>
+                            <div class='item active'>
+                                <img src='img/help1.jpg' alt='Introduction'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help2.jpg' alt='Experiment'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help3.jpg' alt='Time'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help4.jpg' alt='Time Slider'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help5.jpg' alt='Documented heat events'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help6.jpg' alt='Location analysis'>
+                            </div>
+                            <div class='item'>
+                                <img src='img/help7.jpg' alt='Learn more'>
+                            </div>
+                        </div>
+                        <a class='left carousel-control' href='#carousel' role='button' data-slide='prev'>
+                            <span class='icon-prev' aria-hidden='true'></span>
+                            <span class='sr-only'>Previous</span>
+                        </a>
+                        <a class='right carousel-control' href='#carousel' role='button' data-slide='next'>
+                            <span class='icon-next' aria-hidden='true'></span>
+                            <span class='sr-only'>Next</span>
+                        </a>
+                    </div>
+                    <div id='carousel-captions'>
+                        <div class='rc-caption-item active'>
+                            Welcome to Heatwaves, an application by the University of Hawaii Monoa that illustrates regions that are suspectable to deadly heatwaves over the next century. These slides will describe how you can use the application to explore the data.
+                        </div>
+                        <div class='rc-caption-item'>
+                            The analysis is presented using three greenhouse gas concentration trajectories, RCP26, RCP45 and RCP85. These conditions represent, in order, a strong reduction of CO2 emmisions to business as usual. Click the <string>Experiment</string> dropdown menu to toggle between scenarios.
+                        </div>
+                        <div class='rc-caption-item'>
+                            Use the <string>year</string> dropdown menu to conveniently view the analysis for a preset year.
+                        </div>
+                        <div class='rc-caption-item'>
+                            The time slider along the bottom of the application allows you to select any year between 1950 and 2100. To animate the time slider, press the <strong>play</strong> button to the left of the slider. This will automatically advance the time slider and loop to back to the beginning after reaching the end.
+                        </div>
+                        <div class='rc-caption-item'>
+                            When navigation around the map with the time set to prior to 2014 you will likely see one or more blue dots. These dots represent historic heat events that have been scholarly researched and documented. These events contributed to the analytical results. Please refer to the <strong>About</strong> window for more details.
+                        </div>
+                        <div class='rc-caption-item'>
+                            Clicking on the map will invoke this popup window. The window will display two chart specific to the clicked location. The first chart shows the number of yearly deadly days over time and the second show the humidity vs. temperature for the current year.
+                        </div>
+                        <div class='rc-caption-item'>
+                            For more information about the research presented in this application please click the <string>About</string> button. To view this tutorial again please press <string>Help</string> in the upper right hand corner of the application.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='modalAbout' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='label2'>
+        <div class='modal-dialog' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title' id='label2'>About this App</h4>
+                </div>
+                <div class='modal-body'>
+                    <p>Heatwaves pose a considerable concern to human life when their conditions exceed the capacity of the body to expel heat. This causes a life threating situation referred to as hyperthermia. Numerous cases like the 2003 European heatwave, when 70,000 people died in a two-week heatwave, or the 2010 Moscow heatwave, when 10,000 people die in a two month heatwave, are some staggering examples of the risk to life posed by heatwaves. Aside from a handful of other highly cited deadly heat events, little is known about how common killer heatwaves are.</p>
+                    <p>In an exhaustive literature review, a group of researchers at the University of Hawaii Manoa collected data on 783 cases, from 164 cities in 36 countries, where people have died during heatwaves. Their analysis of the climatic conditions on those cities at those times revealed a common threshold of temperature and humidity beyond which conditions turned deadly (Blue line in Figure below). To increase the degree of confidence, the researchers calculated a 95% confidence probability around such a threshold (red line in Figure below), which yielded a threshold beyond which only deadly heatwaves have been reported.</p>
+                    <p>This web-app counts the number of days in a year when conditions of temperature and humidity surpass that threshold and thus pose a risk of death (i.e., the number of deadly days). The map and time plots are based on the average of 20 Earth System Models developed for the recent Coupled Model Intercomparison Project Phase 5, under scenarios RCP26, RCP45 and RCP85, which represent a range of conditions from strong reductions of CO2 emissions to business as usual, respectively. The application also allows visualizing the temperature and humidity of any place for a given year in comparison to the threshold; that graph is based in the projections of one Earth System Model only.</p>
+                    <img id='historic-heatwave-image' src='img/historic-heatwaves.jpg'/>
+                    <p id='historic-heatwave-caption'>Temperature and humidity during prior lethal heat events (black crosses) and during periods of equal duration from the same cities but from randomly selected dates (color gradient, figure from Mora et al 2017). Blue line is the threshold that best separates times in the studied cities when conditions where lethal or not. The red-arrow is a threshold that yielded a 100% certainty on heatwaves being lethal, when it was surpassed.</p>
+                    <p>
+                        For more information please review <a href='https://www.nature.com/nclimate/journal/vaop/ncurrent/full/nclimate3322.html'>Global risk of deadly heat (2017)</a> by <a href='http://www.soc.hawaii.edu/mora/Team.html'>Mora</a> et al from the <a href='https://www.hawaii.edu/'>University of Hawai'i's</a> <a href='http://www.geography.hawaii.edu/index.html'>Department of Geography</a>.
+                    </p>
+                    <p>This application was designed and developed by <a href='https://www.esri.com'>Esri</a>'s <a href='https://geonet.esri.com/groups/applications-prototype-lab'>Applications Prototype Lab</a> in Redlands, California. For your convenience, we have prepared animated heawave videos for the following experiments: <a href='https://youtu.be/-2AFP0ERUo4'>rcp26</a>, <a href='https://youtu.be/KKCBVirOPhI'>rcp45</a> and <a href='https://youtu.be/Bosc0TeKt7A'>rcp85</a>. Source code for this application is available <a href='https://github.com/richiecarmichael/Esri-Deadly-Heatwaves'>here</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='modalChart' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='label3'>
+        <div class='modal-dialog' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title' id='label3'></h4>
+                </div>
+                <div class='modal-body'>
+                    <div id='country-information'></div>
+                    <div id='chart1'>
+                        <div class='progress'>
+                            <div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width:100%;'>
+                                Calculating heat anomalies...
+                            </div>
+                        </div>
+                    </div>
+                    <div id='chart2'>
+                        <div class='progress'>
+                            <div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width:100%;'>
+                                Calculating humidity and temperature...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
