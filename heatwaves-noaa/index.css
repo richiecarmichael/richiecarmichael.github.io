@@ -206,21 +206,21 @@ html, body {
 
 .tick line {
     fill: none;
-    stroke: #00c8c8;
+    stroke: black; /*#00c8c8;*/
     stroke-width: 1px;
 }
 
 .tick text {
-    fill:  #00c8c8;
+    fill: black; /*#00c8c8;*/
     stroke: none;
 }
 
 .domain {
     fill: none;
-    stroke:  #00c8c8;
+    stroke: black; /*#00c8c8;*/
     stroke-width: 1px;
-    cursor: pointer;
-    pointer-events: all;
+    /*cursor: pointer;*/
+    /*pointer-events: all;*/
 }
 
 .rc-lines path {
@@ -253,7 +253,7 @@ html, body {
 }
 
 .rc-axis text {
-    fill: #00c8c8;
+    fill: black; /* #00c8c8;*/
     stroke: none;
 }
 

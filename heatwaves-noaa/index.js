@@ -20,6 +20,7 @@ require([
     'esri/tasks/Geoprocessor',
     'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/SimpleLineSymbol',
+    'esri/symbols/SimpleFillSymbol',
     'esri/renderers/SimpleRenderer',
     'esri/geometry/Point',
     'esri/geometry/Extent',
@@ -48,6 +49,7 @@ function (
     Geoprocessor,
     SimpleMarkerSymbol,
     SimpleLineSymbol,
+    SimpleFillSymbol,
     SimpleRenderer,
     Point,
     Extent,
@@ -75,8 +77,6 @@ function (
         var MODEL    = 'https://maps.esri.com/apl1/rest/services/HeatWave/LHWByTempVsRH/ImageServer';
         var HUMIDITY = 'https://maps.esri.com/apl22/rest/services/Heatwaves/NetCDFReturnValues/GPServer/NetCDFReturnValues';
         var COUNTRY  = 'http://services.arcgis.com/BG6nSlhZSAWtExvp/arcgis/rest/services/Countries_World_Demog/FeatureServer/0';
-        var COUNTRY_NAME = 'CNTRY_NAME';
-        var COUNTRY_POP  = 'POP2015';
         var DATE_MIN = 1950;
         var DATE_MAX = 2100;
 
@@ -149,6 +149,36 @@ function (
             ),
             new Color([0, 255, 255])
         )));
+        
+        var _country = new FeatureLayer(COUNTRY, {
+            outFields: [
+                'CNTRY_NAME',
+                'POP2015'
+            ],
+            showAttribution: false,
+            useMapTime: false,
+            visible: true
+        });
+        _country.setRenderer(new SimpleRenderer(new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(
+                SimpleLineSymbol.STYLE_SOLID,
+                new Color([200, 200, 200, 1]),
+                1
+            ),
+            null
+        )));
+        _country.setSelectionSymbol(
+            new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
+                    new Color([0, 255, 255, 1]),
+                    2
+                ),
+                new Color([0, 255, 255, 0.25])
+            )
+        );
 
         // Define image service parameters.
         var _isp = new ImageServiceParameters();
@@ -192,8 +222,9 @@ function (
             extent: MAPEXTENT
         });
         _map.addLayers([
-            _events,
-            _model
+            _model,
+            _country,
+            _events
         ]);
         _map.on('load', function () {
             _map.setTimeSlider(_timeSlider);
@@ -238,6 +269,10 @@ function (
             population(wgs);
             chart1(wgs);
             chart2(wgs, experiment);
+        });
+        $('#modalChart').on('hidden.bs.modal', function (e) {
+            $('#country-information').empty();
+            _country.clearSelection();
         });
 
         // Show help and about dialogs.
@@ -300,22 +335,15 @@ function (
         
         //
         function population(mappoint){
-            
             var query = new Query();
-            query.returnGeometry = false;
-            query.geometry = mappoint;
             query.num = 1;
-            query.outFields = [
-                COUNTRY_NAME,
-                COUNTRY_POP
-            ];
+            query.geometry = mappoint;
             
-            var queryTask = new QueryTask(COUNTRY);
-            queryTask.execute(query, function(e){
-                //
-                if (e.features.length === 0){return;}
-                var country = e.features[0].attributes[COUNTRY_NAME];
-                var population = e.features[0].attributes[COUNTRY_POP];
+            _country.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(e){
+                if (!e || e.length === 0){return;}
+                //if (e.features.length === 0){return;}
+                var country = e[0].attributes['CNTRY_NAME'];
+                var population = e[0].attributes['POP2015'];
                 var statement = $.format('You selected a location in <strong>{0}</strong>. In 2015, {0} had a population of <strong>{1}</strong>.',[
                     country,
                     d3.format(',g')(population)
