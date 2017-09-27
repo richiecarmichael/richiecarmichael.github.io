@@ -120,7 +120,7 @@ html, body {
     left: 21px;
     bottom: 21px;
     height: 100px;
-    width: 100px;
+    width: 150px;
     pointer-events: none;
 }
 
@@ -136,7 +136,7 @@ html, body {
     bottom: 0;
     top: 0;
     width: 30px;
-    background: linear-gradient( to top, rgb(252, 251, 169), rgb(255, 247, 61), rgb(254, 231, 2), rgb(253, 182, 3), rgb(247, 116, 6), rgb(253, 41, 9), rgb(219, 39, 22), rgb(189, 34, 40), rgb(146, 22, 16), rgb(121, 0, 2), rgb(35, 19, 30) );
+    background: linear-gradient( to top, rgb(255, 255, 255), rgb(252, 251, 169), rgb(255, 247, 61), rgb(254, 231, 2), rgb(253, 182, 3), rgb(247, 116, 6), rgb(253, 41, 9), rgb(219, 39, 22), rgb(189, 34, 40), rgb(146, 22, 16), rgb(121, 0, 2)); /*, rgb(35, 19, 30) );*/
 }
 
 #min {

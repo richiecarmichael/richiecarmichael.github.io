@@ -76,7 +76,7 @@ function (
         var EVENTS   = 'https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/events/FeatureServer/0';
         var MODEL    = 'https://maps.esri.com/apl1/rest/services/HeatWave/LHWByTempVsRH/ImageServer';
         var HUMIDITY = 'https://maps.esri.com/apl22/rest/services/Heatwaves/NetCDFReturnValues/GPServer/NetCDFReturnValues';
-        var COUNTRY  = 'http://services.arcgis.com/BG6nSlhZSAWtExvp/arcgis/rest/services/Countries_World_Demog/FeatureServer/0';
+        var COUNTRY  = 'https://services.arcgis.com/BG6nSlhZSAWtExvp/arcgis/rest/services/Countries_World_Demog/FeatureServer/0';
         var DATE_MIN = 1950;
         var DATE_MAX = 2100;
 
