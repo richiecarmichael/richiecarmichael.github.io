@@ -5,3 +5,4 @@
 *.sln.docstates
 *.scc
 web.config
+.vs
