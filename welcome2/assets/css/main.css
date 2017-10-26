@@ -1171,12 +1171,12 @@ table.alt tfoot {
 }
 
 .poptrox-popup .caption {
-    padding: 2em 2em 0.1em 2em;
-    background-image: -moz-linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);
+    padding: 2em 2em 0 6em;
+    /*background-image: -moz-linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);
     background-image: -webkit-linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);
     background-image: -ms-linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);
-    background-image: linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);
-    bottom: 0;
+    background-image: linear-gradient(to top, rgba(16,16,16,0.45) 25%, rgba(16,16,16,0) 100%);*/
+    top: 0;
     cursor: default;
     left: 0;
     position: absolute;
@@ -1185,7 +1185,11 @@ table.alt tfoot {
     z-index: 2;
 }
 
-.poptrox-popup .caption h2, .poptrox-popup .caption h3, .poptrox-popup .caption h4, .poptrox-popup .caption h5, .poptrox-popup .caption h6 {
+.poptrox-popup .caption h2,
+.poptrox-popup .caption h3,
+.poptrox-popup .caption h4,
+.poptrox-popup .caption h5,
+.poptrox-popup .caption h6 {
     margin: 0 0 0.5em 0;
 }
 
@@ -1974,4 +1978,33 @@ body.loading #main .thumb {
 
 #footer .copyright a {
     color: inherit;
+}
+
+.rc-title {
+    color: white;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    line-height: normal;
+    margin-top: 10px;
+}
+
+.rc-description {
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.29px;
+    line-height: normal;
+    margin-top: 10px;
+}
+
+.rc-buttons a,
+.rc-buttons a:hover {
+    display: inline-block;
+    color: white;
+    margin-right: 10px;
+    font-size: 20px;
+    margin-top: 10px;
+    border-bottom: none;
 }

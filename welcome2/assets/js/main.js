@@ -256,19 +256,19 @@
         $main.poptrox({
             baseZIndex: 20000,
             caption: function ($a) {
-
                 var s = '';
-
                 $a.nextAll().each(function () {
                     s += this.outerHTML;
                 });
-
                 return s;
-
             },
             fadeSpeed: 300,
-            onPopupClose: function () { $body.removeClass('modal-active'); },
-            onPopupOpen: function () { $body.addClass('modal-active'); },
+            onPopupClose: function () {
+                $body.removeClass('modal-active');
+            },
+            onPopupOpen: function () {
+                $body.addClass('modal-active');
+            },
             overlayOpacity: 0,
             popupCloserText: '',
             popupHeight: 150,
