@@ -23,15 +23,15 @@ function (
 
         var MAGNITUDE_MIN = 5;                          // Chart's smallest earthquake magnitude
         var MAGNITUDE_MAX = 10;                         // Chart's largest earthquake magnitude
-        var DATE_MIN = new Date(1900, 1, 1);            // Chart's start date
-        var DATE_MAX = new Date(2020, 1, 1);            // Chart's end date
-        var DATE_START = new Date(1960, 1, 1);          // The chart's initial date
+        var DATE_MIN = new Date(1900, 0, 1);            // Chart's start date
+        var DATE_MAX = new Date(2020, 0, 1);            // Chart's end date
+        var DATE_START = new Date(2018, 1, 22);          // The chart's initial date
 
         var TICKS_PER_YEAR = 1000 * 60 * 60 * 24 * 365; // The number of milliseconds in one year
         var SELECTION = TICKS_PER_YEAR / 2;             // Quake selection width (milliseconds) on the chart
 
-        var _isdragging = false;
-        var _currentTime = DATE_START;
+        var isdragging = false;
+        var currentTime = DATE_START;
 
         var quakes = new FeatureLayer({
             url: URL,
@@ -145,7 +145,7 @@ function (
                 .attr('transform', $.format('translate({0},{1})', [margin.left, margin.top]))
                 .append('g')
                     .attr('id', 'timeline')
-                    .attr('transform', $.format('translate({0},{1})', [x(_currentTime), 0]))
+                    .attr('transform', $.format('translate({0},{1})', [x(currentTime), 0]))
                     .call(d3.behavior.drag()
                         .on('dragstart', function () {
                             // Suppress drag events
@@ -158,7 +158,7 @@ function (
                             });
 
                             // Set dragging flag
-                            _isdragging = true;
+                            isdragging = true;
                         })
                         .on('drag', function () {
                             // Get mouse location. Exit if mouse beyond chart bounds.
@@ -167,7 +167,7 @@ function (
                             if (mouse < 0 || mouse > chartWidth) { return; }
 
                             // Update current time
-                            _currentTime = x.invert(mouse);
+                            currentTime = x.invert(mouse);
 
                             // Select quakes
                             selectQuakes();
@@ -179,7 +179,7 @@ function (
                             });
 
                             // Update dragging flag
-                            _isdragging = false;
+                            isdragging = false;
                         })
                     );
 
@@ -222,7 +222,7 @@ function (
                         })
                         .attr('r', 1)
                         .on('mouseenter', function (d) {
-                            if (_isdragging) { return; }
+                            if (isdragging) { return; }
                             d3.select(this)
                                 .classed('selected', true)
                                 .attr('r', 5);
@@ -233,7 +233,7 @@ function (
                                 .attr('r', 1);
                         })
                         .on('click', function (d) {
-                            _currentTime = d.time;
+                            currentTime = d.time;
                             view.animateTo({
                                 target: [d.longitude, d.latitude],
                                 heading: 0
@@ -251,13 +251,13 @@ function (
             function selectQuakes() {
                 // Move red timeline into position
                 d3.select('#timeline').attr('transform', $.format('translate({0},{1})', [
-                    x(_currentTime),
+                    x(currentTime),
                     0
                 ]));
                 quakeView.filter = {
                     timeExtent: {
-                        start: null, // new Date(_currentTime.valueOf() - TICKS_PER_YEAR),
-                        end: _currentTime
+                        start: null, // new Date(currentTime.valueOf() - TICKS_PER_YEAR),
+                        end: currentTime
                     }
                 };
             }
