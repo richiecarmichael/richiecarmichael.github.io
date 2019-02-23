@@ -1,0 +1,138 @@
+﻿/* -----------------------------------------------------------------------------------
+   Developed by the Applications Prototype Lab
+   (c) 2019 Esri | https://www.esri.com/legal/software-license  
+----------------------------------------------------------------------------------- */
+
+html, body {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    color: #ffffff;
+    /*
+        Avenir Next W00
+        Avenir LT W01 35 Light
+    */
+    font-family: 'Avenir Next W00', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+*:focus {
+    outline: none;
+}
+
+#top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+    background: #007ac2;
+    border-bottom: 1px solid #000;
+}
+
+#bottom {
+    position: absolute;
+    top: 55px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+}
+
+#logo-esri {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+}
+
+#logo-usgs {
+    position: absolute;
+    top: 10px;
+    right: 140px;
+}
+
+#heading {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    right: 200px;
+    text-align: center;
+    pointer-events: none;
+    font-size: 36px;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#chart {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 200px;
+    pointer-events: none;
+    background: transparent;
+}
+
+#chart .domain {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 1;
+}
+
+#chart .tick line {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 1;
+}
+
+#chart .tick text {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: none;
+}
+
+#dots circle {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: none;
+    cursor: pointer;
+}
+
+#dots circle.current {
+    fill: rgba(255, 0, 0, 1);
+}
+
+#dots circle.selected,
+#dots circle.current.selected {
+    fill: rgba(0, 255, 255, 1);
+}
+
+#dots circle.hidden {
+    pointer-events: none;
+    visibility: hidden;
+}
+
+#timeline line {
+    stroke: rgba(255, 0, 0, 0.5);
+    stroke-width: 5;
+    stroke-linecap: round;
+    pointer-events: all;
+    cursor: col-resize;
+}
+
+#timeline polygon {
+    stroke: none;
+    pointer-events: all;
+    cursor: col-resize;
+    fill: rgba(255, 0, 0, 0.5);
+}
+
+#yaxis text {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: none;
+}
