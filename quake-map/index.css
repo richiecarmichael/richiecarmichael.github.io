@@ -9,12 +9,13 @@ html, body {
     margin: 0;
     height: 100%;
     width: 100%;
-    color: #ffffff;
+    color: #fff;
     /*
         Avenir Next W00
         Avenir LT W01 35 Light
     */
     font-family: 'Avenir Next W00', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #1D2224
 }
 
 *:focus {
@@ -55,11 +56,11 @@ html, body {
 #heading {
     position: absolute;
     left: 0;
-    top: 5px;
+    top: 7px;
     right: 200px;
     text-align: center;
     pointer-events: none;
-    font-size: 36px;
+    font-size: 32px;
 }
 
 #map {
@@ -70,14 +71,34 @@ html, body {
     right: 0;
 }
 
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 225px;
+}
+
 #chart {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 200px;
+    top: 0;
     pointer-events: none;
-    background: transparent;
+    background: #1D2224;
+    border-top: 1px solid #000;
+}
+
+#results {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 #chart .domain {
@@ -103,33 +124,44 @@ html, body {
     cursor: pointer;
 }
 
-#dots circle.current {
-    fill: rgba(255, 0, 0, 1);
+#dots circle.highlight {
+    fill: rgba(0, 255, 255);
 }
 
-#dots circle.selected,
-#dots circle.current.selected {
-    fill: rgba(0, 255, 255, 1);
-}
+/* #dots circle.hover,
+#dots circle.highlight.hover {
+    fill: rgb(219, 74, 74);
+} */
 
 #dots circle.hidden {
     pointer-events: none;
     visibility: hidden;
 }
 
-#timeline line {
+#timeline-start line {
     stroke: rgba(255, 0, 0, 0.5);
     stroke-width: 5;
-    stroke-linecap: round;
+    stroke-linecap: square;
     pointer-events: all;
-    cursor: col-resize;
 }
 
-#timeline polygon {
+#timeline-end line {
+    stroke: rgba(0, 255, 0, 0.5);
+    stroke-width: 5;
+    stroke-linecap: square;
+    pointer-events: all;
+}
+
+#timeline-start circle {
     stroke: none;
     pointer-events: all;
-    cursor: col-resize;
-    fill: rgba(255, 0, 0, 0.5);
+    fill: rgba(255, 0, 0, 1);
+}
+
+#timeline-end circle {
+    stroke: none;
+    pointer-events: all;
+    fill: rgba(0, 255, 0, 1);
 }
 
 #yaxis text {
