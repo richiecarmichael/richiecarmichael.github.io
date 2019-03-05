@@ -26,7 +26,7 @@ function (
     "use strict";
 
     const URL = "https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/quakes/FeatureServer/0";
-    const MAGNITUDE_MIN = 5;                // Chart's smallest earthquake magnitude
+    const MAGNITUDE_MIN = 6;                // Chart's smallest earthquake magnitude
     const MAGNITUDE_MAX = 10;               // Chart's largest earthquake magnitude
     const DATE_MIN = new Date(1900, 0, 1);  // Chart's start date
     const DATE_MAX = new Date(2020, 0, 1);  // Chart's end date
@@ -185,10 +185,8 @@ function (
                 geometry: results.queryGeometry,
                 symbol: {
                     type: "simple-fill",
-                    style: "solid",
                     color: [255, 255, 255, 0],
                     outline: {
-                        style: "solid",
                         color: [255, 255, 255, 0.5],
                         width: 0.5
                     }
