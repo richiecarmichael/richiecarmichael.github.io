@@ -5,40 +5,54 @@
 
 require([
     "esri/Map",
+    "esri/Graphic",
     "esri/views/MapView",
     "esri/layers/FeatureLayer",
     "esri/core/watchUtils",
+    "esri/widgets/Expand",
     "dojo/debounce",
     "dojo/number"
 ],
 function (
     Map,
+    Graphic,
     MapView,
     FeatureLayer,
     watchUtils,
+    Expand,
     debounce,
     number
     ) {
-    // Enforce strict mode
     "use strict";
 
-    var URL = "https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/quakes/FeatureServer/0";
-    var INFO = "http://earthquake.usgs.gov/earthquakes/eventpage/";
+    const URL = "https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/quakes/FeatureServer/0";
+    const MAGNITUDE_MIN = 5;                // Chart's smallest earthquake magnitude
+    const MAGNITUDE_MAX = 10;               // Chart's largest earthquake magnitude
+    const DATE_MIN = new Date(1900, 0, 1);  // Chart's start date
+    const DATE_MAX = new Date(2020, 0, 1);  // Chart's end date
 
-    var MAGNITUDE_MIN = 5;                    // Chart's smallest earthquake magnitude
-    var MAGNITUDE_MAX = 10;                   // Chart's largest earthquake magnitude
-    var DATE_MIN = new Date(1900, 0, 1);      // Chart's start date
-    var DATE_MAX = new Date(2020, 0, 1);      // Chart's end date
+    let isdragging = false;
+    let startTime = DATE_MIN;
+    let endTime = DATE_MAX;
+    let total = 0;
+    let highlight = null;
+    let chartExpand = null;
+    let index = {};
+    let magnitude = MAGNITUDE_MIN;
 
-    var isdragging = false;
-    var startTime = DATE_MIN;
-    var endTime = DATE_MAX;
-    var total = 0;
-    var highlight = null;
+    const vars = getUrlVars();
+    if (vars && vars.mag) {
+        var mag = Number.parseFloat(vars.mag);
+        if (!Number.isNaN(mag)){
+            if (mag > 0 && mag < MAGNITUDE_MAX){
+                magnitude = mag;
+            }
+        }
+    }
 
-    var featureLayerQuake = new FeatureLayer({
+    const featureLayerQuake = new FeatureLayer({
         url: URL,
-        definitionExpression: `mag >= ${MAGNITUDE_MIN}`,
+        definitionExpression: `mag >= ${magnitude}`,
         outFields: ["time", "depth", "mag", "place", "type", "id"],
         renderer: {
             type: "simple",
@@ -90,13 +104,13 @@ function (
         }
     });
 
-    var map = new Map({
+    const map = new Map({
         basemap: 'dark-gray-vector',
         layers: [featureLayerQuake]
     });
 
     // Create map and view
-    var view = new MapView({
+    const view = new MapView({
         container: 'map',
         center: [170, 0],
         zoom: 2,
@@ -112,12 +126,12 @@ function (
         }
     });
 
-    var quakeView = null;
+    let quakeView = null;
     view.whenLayerView(featureLayerQuake).then(function(layerView){
         quakeView = layerView;
 
         featureLayerQuake.queryFeatureCount({
-            where: `mag >= ${MAGNITUDE_MIN}`
+            where: `mag >= ${magnitude}`
         }).then(function(count){
             total = count;
         });
@@ -127,44 +141,106 @@ function (
         });
     });
 
-    view.on("resize", function(e){
+    view.on("resize", function(event){
         if (!quakeView) {return;}
         if (quakeView.updating) {return;}
-        if (e.oldWidth === e.width){return;}
+        if (event.oldWidth === event.width){return;}
         // Select quakes
         debounce(loadChart(), 100);
     });
 
+    view.on("pointer-move", function(event){
+        if (!quakeView || !chartExpand || !chartExpand.expanded) {return;}
+        debounce(processPointMove(event), 50);
+    });
+
+    view.when(function(){
+        chartExpand = new Expand({
+            expandIconClass: "esri-icon-experimental",
+            expandTooltip: "",
+            expanded: false,
+            view: view,
+            content: document.getElementById("panel")
+        });
+        view.ui.add(chartExpand, "bottom-left");
+    });
+
+    function processPointMove(event) {
+        event.stopPropagation();
+
+        const query = featureLayerQuake.createQuery();
+        query.timeExtent = {
+            start: startTime,
+            end: endTime
+        };
+        query.geometry = view.toMap(event);
+        query.distance = 500;
+        query.units = "kilometers";
+        query.returnQueryGeometry = true;
+        
+        quakeView.queryFeatures(query).then(function(results) {
+            // Add search circle to map.
+            view.graphics.removeAll();
+            view.graphics.add(new Graphic({
+                geometry: results.queryGeometry,
+                symbol: {
+                    type: "simple-fill",
+                    style: "solid",
+                    color: [255, 255, 255, 0],
+                    outline: {
+                        style: "solid",
+                        color: [255, 255, 255, 0.5],
+                        width: 0.5
+                    }
+                }
+            }));
+
+            // Highlight selected quakes on map.
+            if (highlight) {
+                highlight.remove();
+                highlight = null;
+            }
+            highlight = quakeView.highlight(results.features);
+
+            // Highlight selected quakes in the chart.
+            d3.selectAll("#dots circle").classed('highlight', false);
+            results.features.forEach(function(feature){
+                const dot = index[feature.attributes.OBJECTID];
+                d3.select(dot).classed('highlight', true);
+            });
+        });
+    }
+
     function loadChart() {
         document.getElementById('chart').innerHTML = "";
 
-        var margin = {
+        const margin = {
             left: 80,
             top: 45,
             right: 50,
             bottom: 35
         };
-        var width = document.getElementById('chart').clientWidth;
-        var height = document.getElementById('chart').clientHeight;
+        const width = document.getElementById('chart').clientWidth;
+        const height = document.getElementById('chart').clientHeight;
 
-        var svg = d3.select('#chart')
+        const svg = d3.select('#chart')
             .append('svg')
             .attr('width', width)
             .attr('height', height);
 
-        var x = d3.time.scale()
+        const x = d3.time.scale()
             .domain([DATE_MIN, DATE_MAX])
             .range([0, width - margin.left - margin.right]);
 
-        var y = d3.scale.linear()
-            .domain([MAGNITUDE_MIN, MAGNITUDE_MAX])
+        const y = d3.scale.linear()
+            .domain([magnitude, MAGNITUDE_MAX])
             .range([height - margin.top - margin.bottom, 0]);
 
-        var xaxis = d3.svg.axis()
+        const xaxis = d3.svg.axis()
             .scale(x)
             .orient('bottom');
 
-        var yaxis = d3.svg.axis()
+        const yaxis = d3.svg.axis()
             .scale(y)
             .orient('left')
             .tickValues([5, 6, 7, 8, 9, 10]);
@@ -183,12 +259,12 @@ function (
             .attr('transform', `translate(${margin.left},${margin.top})`)
             .call(yaxis);
 
-        var xmin = x(DATE_MIN);
-        var xmax = x(DATE_MAX);
-        var ymin = y(MAGNITUDE_MIN);
-        var ymax = y(MAGNITUDE_MAX);
+        const xmin = x(DATE_MIN);
+        const xmax = x(DATE_MAX);
+        const ymin = y(magnitude);
+        const ymax = y(MAGNITUDE_MAX);
 
-        var start = svg.append('g')
+        const start = svg.append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`)
             .append('g')
                 .attr('id', 'timeline-start')
@@ -241,7 +317,7 @@ function (
                     })
                 );
         
-        var end = svg.append('g')
+        const end = svg.append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`)
             .append('g')
                 .attr('id', 'timeline-end')
@@ -335,17 +411,19 @@ function (
                     .attr('r', 1)
                     .on('mouseenter', function (d) {
                         if (isdragging) { return; }
-                        d3.select(this).classed('highlight', true).attr('r', 7);
+                        d3.select(this).classed('highlight', true);
 
                         if (highlight) {
                             highlight.remove();
+                            highlight = null;
                         }
                         highlight = quakeView.highlight(d);
                     })
                     .on('mouseleave', function (d) {
-                        d3.select(this).classed('highlight', false).attr('r', 1);
+                        d3.select(this).classed('highlight', false);
                         if (highlight) {
                             highlight.remove();
+                            highlight = null;
                         }
                     })
                     .on('click', function (d) {
@@ -357,13 +435,17 @@ function (
                             easing: "ease"
                         });
                     });
+
+            d3.selectAll('#dots circle').each(function(d){
+                index[d.attributes.OBJECTID] = this;
+            });
         });
 
         updateHeading();
 
         function updateChart() {
-            var xstart = x(startTime);
-            var xend = x(endTime);
+            const xstart = x(startTime);
+            const xend = x(endTime);
             d3.select('#timeline-start').attr('transform', `translate(${xstart},${0})`);
             d3.select('#timeline-end').attr('transform', `translate(${xend},${0})`);
 
@@ -374,22 +456,33 @@ function (
                         end: endTime
                     }
                 },
-                insideEffect: null,
-                outsideEffect: "saturate(0%) opacity(25%)"
+                includedEffect: null,
+                excludedEffect: "saturate(0%) opacity(25%)"
             };
         }
 
         function updateHeading(){
-            var query = featureLayerQuake.createQuery();
+            let query = featureLayerQuake.createQuery();
             query.timeExtent = {
                 start: startTime,
                 end: endTime
             }
             featureLayerQuake.queryFeatureCount(query).then(function(count){
-                var formatCount = number.format(count);
-                var formatTotal = number.format(total);
+                const formatCount = number.format(count);
+                const formatTotal = number.format(total);
                 document.getElementById('results').innerHTML = `${formatCount} of ${formatTotal}`;
             });
         }
+    }
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
     }
 });

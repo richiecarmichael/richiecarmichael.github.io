@@ -126,12 +126,8 @@ html, body {
 
 #dots circle.highlight {
     fill: rgba(0, 255, 255);
+    r: 5;
 }
-
-/* #dots circle.hover,
-#dots circle.highlight.hover {
-    fill: rgb(219, 74, 74);
-} */
 
 #dots circle.hidden {
     pointer-events: none;
@@ -167,4 +163,13 @@ html, body {
 #yaxis text {
     fill: rgba(255, 255, 255, 0.5);
     stroke: none;
+}
+
+#panel {
+    background: #fff;
+    line-height: 1.5em;
+    overflow: auto;
+    padding: 10px;
+    width: 250px;
+    height: 175px;
 }
