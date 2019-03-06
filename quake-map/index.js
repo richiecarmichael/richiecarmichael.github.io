@@ -9,7 +9,6 @@ require([
     "esri/views/MapView",
     "esri/layers/FeatureLayer",
     "esri/core/watchUtils",
-    "esri/widgets/Expand",
     "dojo/debounce",
     "dojo/number"
 ],
@@ -19,7 +18,6 @@ function (
     MapView,
     FeatureLayer,
     watchUtils,
-    Expand,
     debounce,
     number
     ) {
@@ -36,7 +34,6 @@ function (
     let endTime = DATE_MAX;
     let total = 0;
     let highlight = null;
-    let chartExpand = null;
     let index = {};
     let magnitude = MAGNITUDE_MIN;
 
@@ -142,30 +139,34 @@ function (
     });
 
     view.on("resize", function(event){
-        if (!quakeView) {return;}
-        if (quakeView.updating) {return;}
-        if (event.oldWidth === event.width){return;}
+        if (!quakeView) { return; }
+        if (quakeView.updating) { return; }
+        if (event.oldWidth === event.width){ return; }
         // Select quakes
         debounce(loadChart(), 100);
     });
 
     view.on("pointer-move", function(event){
-        if (!quakeView || !chartExpand || !chartExpand.expanded) {return;}
-        debounce(processPointMove(event), 50);
+        if (!quakeView) { return; }
+        highlightEarthquakes(event);
     });
 
-    view.when(function(){
-        chartExpand = new Expand({
-            expandIconClass: "esri-icon-experimental",
-            expandTooltip: "",
-            expanded: false,
-            view: view,
-            content: document.getElementById("panel")
-        });
-        view.ui.add(chartExpand, "bottom-left");
+    view.on("pointer-leave", function(){
+        clearSelection();
     });
 
-    function processPointMove(event) {
+    function clearSelection(){
+        view.graphics.removeAll();
+
+        if (highlight) {
+            highlight.remove();
+            highlight = null;
+        }
+
+        d3.selectAll("#dots circle").classed('highlight', false);
+    }
+
+    function highlightEarthquakes(event) {
         event.stopPropagation();
 
         const query = featureLayerQuake.createQuery();
@@ -179,13 +180,15 @@ function (
         query.returnQueryGeometry = true;
         
         quakeView.queryFeatures(query).then(function(results) {
+            // Remove current highlights.
+            clearSelection();
+
             // Add search circle to map.
-            view.graphics.removeAll();
             view.graphics.add(new Graphic({
-                geometry: results.queryGeometry,
+                geometry: results.queryGeometry,      
                 symbol: {
                     type: "simple-fill",
-                    color: [255, 255, 255, 0],
+                    color: null,
                     outline: {
                         color: [255, 255, 255, 0.5],
                         width: 0.5
@@ -194,14 +197,9 @@ function (
             }));
 
             // Highlight selected quakes on map.
-            if (highlight) {
-                highlight.remove();
-                highlight = null;
-            }
             highlight = quakeView.highlight(results.features);
 
             // Highlight selected quakes in the chart.
-            d3.selectAll("#dots circle").classed('highlight', false);
             results.features.forEach(function(feature){
                 const dot = index[feature.attributes.OBJECTID];
                 d3.select(dot).classed('highlight', true);
@@ -425,12 +423,19 @@ function (
                         }
                     })
                     .on('click', function (d) {
-                        view.goTo({
-                            target: d
-                        }, {
+                        const options = {
                             animate: true,
                             duration: 300,
                             easing: "ease"
+                        };
+                        view.goTo({target: d}, options).then(function(){
+                            view.popup.open({
+                                location: {
+                                    latitude: d.attributes.latitude,
+                                    longitude: d.attributes.longitude
+                                },
+                                features: [d]
+                            });
                         });
                     });
 

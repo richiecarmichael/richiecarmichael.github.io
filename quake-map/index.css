@@ -164,12 +164,3 @@ html, body {
     fill: rgba(255, 255, 255, 0.5);
     stroke: none;
 }
-
-#panel {
-    background: #fff;
-    line-height: 1.5em;
-    overflow: auto;
-    padding: 10px;
-    width: 250px;
-    height: 175px;
-}
