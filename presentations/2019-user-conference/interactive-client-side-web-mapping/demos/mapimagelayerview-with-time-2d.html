@@ -1,0 +1,76 @@
+<html dir="ltr">
+  <head>
+    <title>Map Image Layer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <style>
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #timeSliderDiv {
+        position: absolute;
+        left: 100px;
+        right: 100px;
+        bottom: 50px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/dark/main.css" />
+    <script src="https://js.arcgis.com/4.12/"></script>
+    <script type="text/javascript">
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/MapImageLayer",
+        "esri/widgets/TimeSlider"
+      ], function(
+        Map,
+        MapView,
+        MapImageLayer,
+        TimeSlider
+      ) {
+        const URL =
+        "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Earthquakes_Since1970/MapServer";
+
+        const layer = new MapImageLayer({
+          url: URL
+        });
+
+        const map = new Map({
+          basemap: "dark-gray",
+          layers: [layer]
+        });
+
+        const view = new MapView({
+          container: "map",
+          map,
+          center: [-100, 34],
+          zoom: 2
+        });
+
+        const timeSlider = new TimeSlider({
+          container: "timeSliderDiv",
+          view
+        });
+
+        layer.when(function() {
+          const { fullTimeExtent, interval } = layer.timeInfo;
+          timeSlider.set({
+            fullTimeExtent,
+            stops: {
+              interval
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="timeSliderDiv"></div>
+  </body>
+</html>

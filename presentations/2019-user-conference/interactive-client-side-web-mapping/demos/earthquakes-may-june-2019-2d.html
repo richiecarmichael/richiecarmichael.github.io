@@ -1,0 +1,332 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Earthquakes May/June 2019</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/dark/main.css" />
+    <script src="https://js.arcgis.com/4.12/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #timeSlider {
+        position: absolute;
+        left: 100px;
+        right: 100px;
+        bottom: 20px;
+      }
+      #infoDiv {
+        height: 200px;
+        padding: 10px;
+        width: 280px;
+      }
+      #infoDiv span {
+        color: #1dc1fc;
+        font-size: 10pt;
+        font-weight: bolder;
+      }
+    </style>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/CSVLayer",
+        "esri/widgets/TimeSlider",
+        "esri/widgets/Expand",
+        "esri/widgets/Legend",
+        "esri/core/promiseUtils"
+      ], function(
+        Map,
+        MapView,
+        CSVLayer,
+        TimeSlider,
+        Expand,
+        Legend,
+        promiseUtils
+        ) {
+        let layerView, categoryChart;
+
+        const layer = new CSVLayer({
+          url: "earthquakes-may-june-2019.csv",
+          copyright: "USGS Earthquakes",
+          title: "USGS Earthquakes",
+          timeInfo: {
+            startField: "time",
+            interval: {
+              unit: "days",
+              value: 1
+            }
+          },
+          renderer: {
+            type: "simple",
+            field: "mag",
+            symbol: {
+              type: "simple-marker",
+              color: "orange",
+              outline: {
+                color: "dark-grey"
+              }
+            },
+            visualVariables: [
+              {
+                type: "size",
+                field: "mag",
+                stops: [
+                  {
+                    value: 1,
+                    size: "8px"
+                  },
+                  {
+                    value: 2,
+                    size: "16"
+                  },
+                  {
+                    value: 3,
+                    size: "32"
+                  },
+                  {
+                    value: 4,
+                    size: "48px"
+                  }
+                ]
+              },
+                {
+                type: "color",
+                field: "depth",
+                stops: [
+                  {
+                    value: 2,
+                    color: "#FFFCD4",
+                    label: "2-5km"
+                  },
+                  {
+                    value: 5,
+                    color: "#350242",
+                    label: ">5km"
+                  }
+                ]
+              }
+            ]
+          }
+        });
+
+        const map = new Map({
+          basemap: "topo",
+          layers: [layer]
+        });
+
+        var view = new MapView({
+          map: map,
+          container: "viewDiv",
+          zoom: 14,
+          center: [-117.50268861648364, 34.0471307824281],
+          popup: {
+            defaultPopupTemplateEnabled: true
+          }
+        });
+
+        // time slider widget initialization
+        const timeSlider = new TimeSlider({
+          container: "timeSlider",
+          mode: "cumulative-from-start",
+          loop: true,
+          playRate: 400
+        });
+        view.ui.add(timeSlider);
+        
+        const legendExpand = new Expand({
+          collapsedIconClass: "esri-icon-collapse",
+          expandIconClass: "esri-icon-expand",
+          expandTooltip: "Legend",
+          view,
+          content: new Legend({
+            view
+          }),
+          expanded: false
+        });
+        view.ui.add(legendExpand, "top-left");
+        
+        const statsDiv = document.getElementById("statsDiv");
+        const infoDiv = document.getElementById("infoDiv");
+        const infoDivExpand = new Expand({
+          collapsedIconClass: "esri-icon-collapse",
+          expandIconClass: "esri-icon-expand",
+          expandTooltip: "Expand earthquakes info",
+          view: view,
+          content: infoDiv,
+          expanded: true
+        });
+        view.ui.add(infoDivExpand, "top-right");
+
+        // wait till the layer view is loaded
+        view.whenLayerView(layer).then(function(lv) {
+          
+          layer.createPopupTemplate();
+          layerView = lv;
+          const { fullTimeExtent, interval } = layer.timeInfo;
+          const start = fullTimeExtent.start;
+          const end = new Date(start);
+          end.setDate(end.getDate() + 1);
+
+          // set up time slider properties
+          timeSlider.set({
+            fullTimeExtent,
+            values: [end],
+            stops: {
+              interval
+            }
+          });
+        });
+
+        const avgDepth = {
+          onStatisticField: "depth",
+          outStatisticFieldName: "avg_depth",
+          statisticType: "avg"
+        };
+
+        const magMax = {
+          onStatisticField: "mag",
+          outStatisticFieldName: "mag_max",
+          statisticType: "max"
+        };
+
+        const magAvg = {
+          onStatisticField: "mag",
+          outStatisticFieldName: "mag_avg",
+          statisticType: "avg"
+        };
+
+        const magMin = {
+          onStatisticField: "mag",
+          outStatisticFieldName: "mag_min",
+          statisticType: "min"
+        };
+
+        const tremCount = {
+          onStatisticField: "mag",
+          outStatisticFieldName: "mag_count",
+          statisticType: "count"
+        };
+
+        // wait for all queryFeatures results
+        const queryLayerFeaturesForStats = promiseUtils.debounce(function(queries) {
+          // pass each whereClause item into callback function
+          return promiseUtils.eachAlways(
+            queries.map(function(query) {
+              return layer.queryFeatures(query);
+            })
+          );
+        });
+
+        // watch for time slider timeExtent change
+        timeSlider.watch("timeExtent", (timeExtent) => {
+          layerView.effect = {
+            filter: {
+              timeExtent,
+              geometry: view.extent
+            },
+            excludedEffect: "grayscale(100%) opacity(10%)"
+          };
+
+          const magMaxQuery = layerView.effect.filter.createQuery();
+          magMaxQuery.outStatistics = [magMax];
+
+          const magAvgQuery = layerView.effect.filter.createQuery();
+          magAvgQuery.outStatistics = [magAvg];
+
+          const magMinQuery = layerView.effect.filter.createQuery();
+          magMinQuery.outStatistics = [magMin];
+
+          const tremCountQuery = layerView.effect.filter.createQuery();
+          tremCountQuery.outStatistics = [tremCount];
+
+          const avgDepthQuery = layerView.effect.filter.createQuery();
+          avgDepthQuery.outStatistics = [avgDepth];
+
+          const queries = [
+            magMaxQuery,
+            magAvgQuery,
+            magMinQuery,
+            tremCountQuery,
+            avgDepthQuery
+          ];
+
+          queryLayerFeaturesForStats(queries).then(function(eachAlwaysResults) {
+            statsDiv.innerHTML = "";
+            const htmls = eachAlwaysResults.map(function(result, i) {
+              if (result.error) {
+                return result.error;
+              } else {
+                if (result.value.features.length >= 1) {
+                  var attributes = result.value.features[0].attributes;
+                  if (attributes.mag_max && attributes.mag_max != null) {
+                    const magMaxHtml =
+                      "<br/> Max magnitude: <b><span>" +
+                      result.value.features[0].attributes.mag_max +
+                      "</span></b>";
+                    return magMaxHtml;
+                  }
+                  if (attributes.mag_avg && attributes.mag_avg != null) {
+                    const avg = result.value.features[0].attributes.mag_avg.toFixed(
+                      2
+                    );
+
+                    const avgMagHtml =
+                      "<br/> Average magnitude: <b><span>" +
+                      avg +
+                      "</span></b>";
+                    return avgMagHtml;
+                  }
+                  if (attributes.mag_min && attributes.mag_min != null) {
+                    const minMagHtml =
+                      "<br/> Min magnitude: <b><span>" +
+                      result.value.features[0].attributes.mag_min +
+                      "</span></b>";
+                    return minMagHtml;
+                  }
+                  if (attributes.mag_count && attributes.mag_count != null) {
+                    const magCountHtml =
+                      "<br/> <b><span>" +
+                      result.value.features[0].attributes.mag_count +
+                      "</span></b> earthquakes were recorded";
+                    return magCountHtml;
+                  }
+                  if (attributes.avg_depth && attributes.avg_depth != null) {
+                    const avgDepthHtml =
+                      "<br/> Avg depth: <b><span>" +
+                      result.value.features[0].attributes.avg_depth.toFixed(2) +
+                      "</span></b> kms";
+                    return avgDepthHtml;
+                  }
+                }
+              }
+            });
+
+            const startDate = timeSlider.fullTimeExtent.start.toLocaleDateString();
+            const endDate = timeExtent.end.toLocaleDateString();
+            const yearHtml = `Between <b>${startDate} - ${endDate}</b> ${htmls[3]}<br/>`;
+
+            if (htmls[0] == undefined) {
+              statsDiv.innerHTML = "nothing recorded on this day";
+            } else {
+              statsDiv.innerHTML = yearHtml + htmls[0] + htmls[1] + htmls[2] + htmls[4];
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <div id="timeSlider"></div>
+    <div id="infoDiv" class="esri-widget">
+      <div> <b>USGS Earthquakes</b></div><br/>
+      <div id="statsDiv" class="esri-widget"></div>
+    </div>
+  </body>
+</html>
