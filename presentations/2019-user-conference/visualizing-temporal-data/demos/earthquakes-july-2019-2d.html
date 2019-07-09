@@ -26,23 +26,21 @@
         "esri/Map",
         "esri/views/MapView",
         "esri/layers/CSVLayer",
-        "esri/widgets/TimeSlider"
+        "esri/widgets/TimeSlider",
+        "esri/core/watchUtils"
       ], function(
         Map,
         MapView,
         CSVLayer,
-        TimeSlider
+        TimeSlider,
+        watchUtils
         ) {
-        const layer = new CSVLayer({
-          url: "ridgecrest-july-2019.csv",
+        const earthquakes = new CSVLayer({
+          url: "earthquakes-july-2019.csv",
           copyright: "USGS Earthquakes",
           title: "USGS Earthquakes",
           timeInfo: {
-            startField: "time",
-            interval: {
-              value: 1,
-              unit: "hours"
-            }
+            startField: "time"
           },
           renderer: {
             type: "simple",
@@ -50,7 +48,6 @@
             symbol: {
               type: "simple-marker",
               style: "circle",
-              color: "#FF7F00",
               outline: {
                 style: "solid",
                 color: "#3A3B3B",
@@ -62,14 +59,19 @@
                 type: "size",
                 field: "mag",
                 stops: [
-                  { value: 1, size: "5px" },
-                  { value: 2, size: "5px" },
-                  { value: 3, size: "5px" },
                   { value: 4, size: "5px" },
                   { value: 5, size: "10px" },
                   { value: 6, size: "20px" },
                   { value: 7, size: "40px" },
                   { value: 8, size: "80px" }
+                ]
+              },
+              {
+                type: "color",
+                field: "mag",
+                stops: [
+                  { value: 5, color: "#FF7F00" },
+                  { value: 5.1, color: "#FF0000" }
                 ]
               }
             ]
@@ -78,62 +80,70 @@
 
         const map = new Map({
           basemap: "dark-gray-vector",
-          layers: [layer]
+          layers: [earthquakes]
         });
 
         const view = new MapView({
           container: "viewDiv",
           map,
-          zoom: 2,
-          center: [-150, 20]
+          zoom: 6,
+          center: [-117, 35]
         });
 
-        // time slider widget initialization
-        const timeSlider = new TimeSlider({
-          container: "timeSlider",
-          view,
-          playRate: 100//,
-          //timeVisible: true
-        });
-        view.ui.add(timeSlider);
+        return;
 
-        // wait till the layer view is loaded
-        let layerView;
-        view.whenLayerView(layer).then(function(lv) {
-          layerView = lv;
-          const { fullTimeExtent, interval } = layer.timeInfo;
-          const { start } = fullTimeExtent;
-          const end = new Date(start);
-          end.setHours(end.getHours() + 6);
+        // Wait for the Earthquake layer to initialize.
+        view.whenLayerView(earthquakes).then(function(layerView) {
+          layerView.visible = false;
 
-          // set up time slider properties
-          timeSlider.set({
-            fullTimeExtent,
-            values: [
-              start,
-              end
-            ],
-            stops: {
-              interval
-            }
+          // Wait for the Earthquake layer to download data.
+          watchUtils.whenFalseOnce(layerView, "updating", function(){
+            // Compute initial timeextent.
+            const { fullTimeExtent } = earthquakes.timeInfo;
+            const { start } = fullTimeExtent;
+            const end = new Date(start);
+            end.setHours(end.getHours() + 6);
+
+            // Create the TimeSlider widget
+            const timeSlider = new TimeSlider({
+              container: "timeSlider",
+              fullTimeExtent,
+              view,
+              values: [start, end],
+              stops: {
+                interval: {
+                  value: 1,
+                  unit: "hours"
+                }
+              },
+              //playRate: 100,
+              //timeVisible: true
+            });
+
+            // // Update the layerview's filter.
+            // timeSlider.watch("timeExtent", (timeExtent) => {
+            //   layerView.filter = {
+            //     timeExtent
+            //   };
+            // });
+
+            // // Update the layerview's effect.
+            // timeSlider.watch("timeExtent", (timeExtent) => {
+            //   layerView.effect = {
+            //     filter: {
+            //       timeExtent
+            //     },
+            //     excludedEffect: "grayscale(100%) opacity(10%)"
+            //   };
+            // });
+
+            // Play
+            timeSlider.play();
+
+            // Display the Earthquake layer.
+            layerView.visible = true;
           });
-          timeSlider.play();
         });
-
-        // watch for time slider timeExtent change
-        // timeSlider.watch("timeExtent", (timeExtent) => {
-        //   layerView.filter = {
-        //     timeExtent,
-        //     geometry: view.extent
-        //   }
-        //   // layerView.effect = {
-        //   //   filter: {
-        //   //     timeExtent,
-        //   //     geometry: view.extent
-        //   //   },
-        //   //   excludedEffect: "grayscale(100%) opacity(10%)"
-        //   // };
-        // });
       });
     </script>
   </head>

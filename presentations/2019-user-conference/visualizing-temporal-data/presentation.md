@@ -24,6 +24,7 @@
 ### About Time!
 
 - Time Support @ [4.12](https://developers.arcgis.com/javascript/)
+  - Query.[timeExtent](https://developers.arcgis.com/javascript/latest/api-reference/esri-tasks-support-Query.html#timeExtent)
   - [FeatureLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html), [ImageryLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-ImageryLayer.html), [MapImageLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-MapImageLayer.html), [CSVLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-CSVLayer.html) and [GeoJSONLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GeoJSONLayer.html)
   - [MapView.timeExtent](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html#timeExtent) & [SceneView.timeExtent](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#timeExtent)
   - [TimeSlider](https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-TimeSlider.html) widget
@@ -109,7 +110,7 @@ var ids      = await featureLayerView.queryObjectIds(query)
 ```js
 // Only show earthquakes that occured between 2000 and 2006.
 featureLayerView.filter = new FeatureFilter({
-  timeExtent: new TimeExtnet({
+  timeExtent: new TimeExtent({
     start: new Date(2000, 0, 1),
     end: new Date(2007, 0, 1)
   })
@@ -284,9 +285,9 @@ view.whenLayerView(featureLayerQuake).then(function(lv){
 ### What's coming with Time?
 
 - Time Support @ 4.13
-  - Layer can "opt-out" of honoring **View.timeExtent**
-  - Layers can offset their time</br>_(e.g. for analyzing yearly or seasonal trends)_
-  - More responsive TimeSlider widget
+  - "opt-out" for layers</br>_(i.e. ignore View.timeExtent)_
+  - Time offset</br>_(e.g. for analyzing yearly or seasonal trends)_
+  - Responsive TimeSlider widget
 
 ---
 
@@ -298,6 +299,7 @@ view.whenLayerView(featureLayerQuake).then(function(lv){
 - [Hurricanes and Storms](demos/hurricanes-and-storms-2d.html)
 - [Imagery with Time](demos/imagelayerview-with-time-2d.html)
 - [MapServer with Time](demos/mapimagelayerview-with-time-2d.html)
+- [Quakes in 3d](https://ycabon.github.io/earthquakes/)
 
 ---
 
