@@ -2,7 +2,7 @@
 
 <h1 style="font-size: 60px;">Visualizing Temporal Data<br>with the ArcGIS API for JavaScript</h1>
 <p style="font-size: 24px;">Jeremy Bartley [<a href="https://github.com/mapdex">@mapdex</a>] | Yann Cabon [<a href="https://github.com/yanncabon">@yanncabon</a>] | Richie Carmichael [<a href="https://github.com/kiwiRichie">@kiwiRichie</a>]</a></p>
-<p style="font-size: 24px;"><a href="https://git.io/fjrzO"><code>https://git.io/fjrzO</code></a></p>
+<p style="font-size: 30px;"><code><a href="https://git.io/fjrzO">https://git.io/fjrzO</a> (<a href="?print-pdf">pdf</a>)</code></p>
 
 ---
 
