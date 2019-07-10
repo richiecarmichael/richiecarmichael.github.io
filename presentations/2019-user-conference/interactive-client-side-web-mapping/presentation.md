@@ -256,7 +256,7 @@ featureLayerView.filter = new FeatureFilter({
 // Only show buildings within 10 miles of the mouse cursor.
 mapView.on("pointer-move", function(e) {
   buildingLayerView.filter = {
-    geometry: mapView.toMap({e.x, e,y}),
+    geometry: mapView.toMap({e.x, e.y}),
     distance: 10,
     units: "miles"
   }
@@ -306,13 +306,6 @@ featureLayerView.effect = new FeatureEffect({
 - [Imagery with Time](demos/imagelayerview-with-time-2d.html)
 - [MapServer with Time](demos/mapimagelayerview-with-time-2d.html)
 - [Quakes in 3d](https://ycabon.github.io/earthquakes/)
-
----
-
-<!-- .slide: data-background="../../reveal.js/img/2019/uc/bg-2.png" -->
-### Putting it all together
-
-[![Demo](./demos/client-side_statistics/client-side_statistics.png)](./demos/client-side_statistics/index.html)
 
 ---
 
