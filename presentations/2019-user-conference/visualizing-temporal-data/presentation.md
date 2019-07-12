@@ -2,7 +2,7 @@
 
 <h1 style="font-size: 60px;">Visualizing Temporal Data<br>with the ArcGIS API for JavaScript</h1>
 <p style="font-size: 24px;">Yann Cabon [<a href="https://github.com/yanncabon">@yanncabon</a>] | Richie Carmichael [<a href="https://github.com/kiwiRichie">@kiwiRichie</a>]</a></p>
-<p style="font-size: 30px;"><code><a href="https://git.io/fjrzO">https://git.io/fjrzO</a> (<a href="?print-pdf">pdf</a>)</code></p>
+<p style="font-size: 30px;"><code><a href="https://git.io/fjrzO">https://git.io/fjrzO</a> (<a href="?print-pdf">printer friendly</a>)</code></p>
 
 ---
 
@@ -304,7 +304,9 @@ view.whenLayerView(featureLayerQuake).then(function(lv){
 ---
 
 <!-- .slide: data-background="../../reveal.js/img/2019/uc/bg-3.png" -->
-### Visualizing time using Arcade</br>Color earthquakes by age
+#### Visualizing time using Arcade</br>Color earthquakes by age
+
+<a href="./demos/earthquakes-arcade.html" target="_blank"><img src="./demos/earthquakes-arcade.png" style="border: 0px; background:none; box-shadow: none;" width=800>
 
 ---
 

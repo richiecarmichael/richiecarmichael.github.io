@@ -6,13 +6,13 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>Animate color visual variable - 4.11</title>
+    <title>Animate color visual variable - 4.12</title>
 
     <link
       rel="stylesheet"
-      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+      href="https://js.arcgis.com/4.12/esri/themes/light/main.css"
     />
-    <script src="https://js.arcgis.com/4.11/"></script>
+    <script src="https://js.arcgis.com/4.12/"></script>
 
     <script>
       require([
@@ -95,6 +95,28 @@
           }),
           "top-right"
         );
+
+        //--------------------------------------------------------------------------
+        //
+        //  Setup slider
+        //
+        //--------------------------------------------------------------------------
+
+        var slider = document.getElementById("slider");
+        var sliderValue = document.getElementById("sliderValue");
+
+        // Update filter when user drags the slider
+        function inputHandler() {
+          setYear(parseInt(slider.value));
+        }
+        slider.addEventListener("input", inputHandler);
+        slider.addEventListener("change", inputHandler);
+
+        function setYear(year) {
+          sliderValue.innerHTML = Math.floor(year);
+          slider.value = Math.floor(year);
+        }
+        
       });
     </script>
 

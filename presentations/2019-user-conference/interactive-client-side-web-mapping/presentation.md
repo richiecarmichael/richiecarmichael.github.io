@@ -2,7 +2,7 @@
 
 <h1 style="font-size: 60px;">Interactive Client-Side Mapping<br>with the ArcGIS API for JavaScript</h1>
 <p style="font-size: 30px;">Kristian Ekenes [<a href="https://github.com/kekenes">@kekenes</a>] | Richie Carmichael [<a href="https://github.com/kiwiRichie">@kiwiRichie</a>]</p>
-<p style="font-size: 30px;"><code><a href="https://git.io/fjr3N">https://git.io/fjr3N</a> (<a href="?print-pdf">pdf</a>)</code></p>
+<p style="font-size: 30px;"><code><a href="https://git.io/fjr3N">https://git.io/fjr3N</a> (<a href="?print-pdf">printer friendly</a>)</code></p>
 
 ---
 
