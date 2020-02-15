@@ -18,7 +18,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>mPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/mPoint.png</href> 
 			</Icon> 
 						 <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -30,7 +30,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>dPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/dPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -42,7 +42,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>hPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/hPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -54,7 +54,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>initialPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/initialPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -66,7 +66,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>xmPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/xmPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -78,7 +78,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>xhPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/xhPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -90,7 +90,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>lPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/lPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -111,7 +111,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>xdPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/xdPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -132,7 +132,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>sPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/sPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
@@ -144,7 +144,7 @@
 		<IconStyle> 
 			<scale>1.0</scale> 
 			<Icon> 
-				<href>xsPoint.png</href> 
+				<href>https://richiecarmichael.github.io/kml/xsPoint.png</href> 
 			</Icon> 
              <hotSpot x="0" y="0" xunits="insetPixels" yunits="insetPixels"/>
 		</IconStyle> 
