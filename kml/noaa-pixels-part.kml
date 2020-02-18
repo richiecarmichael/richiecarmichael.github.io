@@ -2,7 +2,7 @@
 
 	<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"> 
 	<Document> 
-	<name>Test-Pixels-Zero</name> 
+	<name>Test-Pixels-Part</name> 
 	<open>0</open> 
 	<description>
 		<![CDATA[<TABLE>
@@ -20,7 +20,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/mPoint.png</href> 
 			</Icon> 
-							<hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -32,7 +32,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/dPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -44,7 +44,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/hPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -56,7 +56,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/initialPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -68,7 +68,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/xmPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -80,7 +80,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/xhPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -92,7 +92,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/lPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -113,7 +113,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/xdPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -134,7 +134,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/sPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
@@ -146,7 +146,7 @@
 			<Icon> 
 				<href>https://richiecarmichael.github.io/kml/xsPoint.png</href> 
 			</Icon> 
-             <hotSpot x="0" y="0" xunits="pixels" yunits="pixels"/>
+             <hotSpot x="8" y="8" xunits="pixels" yunits="pixels"/>
 		</IconStyle> 
 		<LabelStyle> 
 			<scale>1.0</scale> 
