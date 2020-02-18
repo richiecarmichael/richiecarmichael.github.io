@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>MapServer TimeExent</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/css/main.css" />
+  <script src="https://js.arcgis.com/4.14/"></script>
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/KMLLayer"
+    ],
+    function(
+      Map,
+      MapView,
+      KMLLayer
+    ) {
+      const viewLeft = new MapView({
+        container: "viewDiv",
+        map: new Map({
+          basemap: "dark-gray",
+          layers: [
+            new KMLLayer({ 
+              url: "https://richiecarmichael.github.io/kml/noaa-insetpixels-zero.kml"
+            })
+          ]
+        })
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
