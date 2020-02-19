@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client-side filters</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <style>
+    html,
+    body,
+    #map {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #timeSliderDiv {
+      position: absolute;
+      left: 100px;
+      right: 100px;
+      bottom: 50px;
+    }
+    #options {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      background-color: #242424;
+      color: #D1D1D1
+    }
+    #options label {
+      display: block;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/dark/main.css" />
+  <script src="https://js.arcgis.com/4.12/"></script>
+  <script type="text/javascript">
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/TimeSlider",
+      "esri/core/watchUtils"
+    ], function (
+      Map,
+      MapView,
+      FeatureLayer,
+      TimeSlider,
+      watchUtils
+    ) {
+      "use strict";
+      const URL = "https://services.arcgis.com/6DIQcwlPy8knb6sg/arcgis/rest/services/quakes/FeatureServer/0";
+      const MAGNITUDE_MIN = 5.0; // Smallest earthquake magnitude
+
+      const featureLayerQuake = new FeatureLayer({
+        url: URL,
+        definitionExpression: "mag >= " + MAGNITUDE_MIN,
+        outFields: ["mag"],
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            size: 7,
+            color: "#FF7F00",
+            outline: {
+              style: "solid",
+              color: "#3A3B3B",
+              width: 0.5
+            }
+          }
+        },
+        visible: false
+      });
+
+      const map = new Map({
+        basemap: "dark-gray-vector",
+        layers: [featureLayerQuake]
+      });
+
+      const view = new MapView({
+        container: "map",
+        map: map,
+        center: [170, 0],
+        zoom: 2,
+        ui: {
+          components: []
+        }
+      });
+
+      const timeSlider = new TimeSlider({
+        container: "timeSliderDiv",
+        playRate: 100,
+        stops: {
+          interval: {
+            value: 1,
+            unit: "years"
+          }
+        }
+      });
+      timeSlider.watch("timeExtent", function(timeExtent) {
+        updateView(timeExtent);
+      });
+
+      let quakeView = null;
+      view.whenLayerView(featureLayerQuake).then(function(layerView) {
+        watchUtils.whenFalseOnce(layerView, "updating", function() {
+          quakeView = layerView;
+          timeSlider.fullTimeExtent = featureLayerQuake.timeInfo.fullTimeExtent;
+          featureLayerQuake.visible = true;
+        });
+      });
+
+      document.getElementById('filter').addEventListener('click', function() {
+        if (quakeView == null) { return; }
+        quakeView.layer.renderer.symbol.color = "#FF7F00";
+        quakeView.effect = null;
+        updateView(timeSlider.timeExtent);
+      });
+
+      document.getElementById('effect').addEventListener('click', function() {
+        if (quakeView == null) { return; }
+        quakeView.layer.renderer.symbol.color = "#FF7F00";
+        quakeView.filter = null;
+        updateView(timeSlider.timeExtent);
+      });
+
+      function updateView(timeExtent) {
+        if (quakeView == null) { return; }
+        if (document.getElementById('filter').checked) {
+          quakeView.set({
+            filter: {
+              where: featureLayerQuake.definitionExpression,
+              timeExtent: timeExtent
+            }
+          });
+        }
+        if (document.getElementById('effect').checked) {
+          quakeView.set({
+            effect: {
+              filter: {
+                where: featureLayerQuake.definitionExpression,
+                timeExtent: timeExtent
+              },
+              //includedEffect: "hue-rotate(90deg)",
+              excludedEffect: "saturate(0%) opacity(10%)"
+            }
+          });
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="timeSliderDiv"></div>
+  <div id="options">
+    <fieldset class="fieldset-radio">
+      <legend>Choose a Temporal Property</legend>
+      <label><input id="filter" type="radio" name="time" value="Filter" checked>FeatureLayerView.Filter</label>
+      <label><input id="effect" type="radio" name="time" value="Effect">FeatureLayerView.Effect</label>
+    </fieldset>
+  </div>
+</body>
+</html>
